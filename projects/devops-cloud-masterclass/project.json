@@ -1,0 +1,35 @@
+{
+  "id": "devops-cloud-masterclass",
+  "name": "DevOps & Cloud Masterclass",
+  "description": "Comprehensive 16:9 YouTube landscape breakdowns on Kubernetes, Docker, CI/CD, and Nginx high availability.",
+  "category": "Cloud & DevOps",
+  "aspect_ratio": "16:9",
+  "theme": "fire_ember",
+  "language": "bn",
+  "voice": "bn-BD-PradeepNeural",
+  "created_at": "2026-10-28 01:36:43",
+  "branding": {
+    "author": "Rsm Monaem",
+    "brand_name": "DevOps Pro",
+    "brand_tagline": "Enterprise Cloud Systems",
+    "cta_text": "চ্যানেলটি সাবস্ক্রাইব করুন"
+  },
+  "cron": {
+    "enabled": false,
+    "hour": 18,
+    "minute": 0
+  },
+  "llm": {
+    "provider": "template",
+    "api_key": "",
+    "model": "gemini-2.5-flash"
+  },
+  "audio": {
+    "provider": "edge_tts",
+    "edge_voice": "bn-BD-PradeepNeural",
+    "elevenlabs_api_key": "",
+    "elevenlabs_voice_id": "j5PhP1QJv2DvlhRv3mEv",
+    "openai_api_key": "",
+    "enable_sfx": true
+  }
+}

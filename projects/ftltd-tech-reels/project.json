@@ -1,0 +1,35 @@
+{
+  "id": "ftltd-tech-reels",
+  "name": "FTLTD Bengali Tech Reels",
+  "description": "High-retention 60-second vertical tech reels in Bengali covering system design and software architecture.",
+  "category": "Software Architecture",
+  "aspect_ratio": "9:16",
+  "theme": "cyber_cyan",
+  "language": "bn",
+  "voice": "bn-IN-BashkarNeural",
+  "created_at": "2026-10-28 01:36:43",
+  "branding": {
+    "author": "Rsm Monaem",
+    "brand_name": "FTLTD",
+    "brand_tagline": "Future TECH Limited",
+    "cta_text": "ফলো ও সাবস্ক্রাইব করুন"
+  },
+  "cron": {
+    "enabled": true,
+    "hour": 10,
+    "minute": 30
+  },
+  "llm": {
+    "provider": "template",
+    "api_key": "",
+    "model": "gemini-2.5-flash"
+  },
+  "audio": {
+    "provider": "edge_tts",
+    "edge_voice": "bn-IN-BashkarNeural",
+    "elevenlabs_api_key": "",
+    "elevenlabs_voice_id": "j5PhP1QJv2DvlhRv3mEv",
+    "openai_api_key": "",
+    "enable_sfx": true
+  }
+}

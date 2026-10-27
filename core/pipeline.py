@@ -20,6 +20,7 @@ OUTPUT_BASE_DIR = os.path.join(BASE_DIR, "output")
 LOGS_DIR = os.path.join(BASE_DIR, "logs")
 
 from core.config import load_config, ASPECT_RATIOS
+from core.project_manager import get_project, get_project_dir
 from core.llm_engine import plan_content
 from core.audio_engine import build_scene_audio
 from core.thumbnail_renderer import generate_thumbnail
@@ -48,11 +49,20 @@ def format_social_copies(topic_data, branding):
         }
     }
 
-def run_pipeline(user_topic=None, user_hook=None, custom_scenes=None, aspect_ratio=None, theme=None, custom_dir=None):
+def run_pipeline(user_topic=None, user_hook=None, custom_scenes=None, aspect_ratio=None, theme=None, custom_dir=None, project_id=None):
     cfg = load_config()
+    
+    # If project_id provided, merge project-specific config
+    project_meta = None
+    if project_id:
+        project_meta = get_project(project_id)
+        if project_meta:
+            cfg.update(project_meta)
+            print(f"📁 Scoped Execution to Project: [{project_meta.get('name')}] ({project_id})")
+
     branding = cfg.get("branding", {})
-    selected_aspect = aspect_ratio or cfg.get("default_aspect_ratio", "9:16")
-    selected_theme = theme or cfg.get("default_theme", "cyber_cyan")
+    selected_aspect = aspect_ratio or cfg.get("aspect_ratio") or cfg.get("default_aspect_ratio", "9:16")
+    selected_theme = theme or cfg.get("theme") or cfg.get("default_theme", "cyber_cyan")
 
     now = datetime.datetime.now()
     today_str = now.strftime("%Y-%m-%d")
@@ -61,6 +71,8 @@ def run_pipeline(user_topic=None, user_hook=None, custom_scenes=None, aspect_rat
     # Output directory
     if custom_dir:
         job_dir = custom_dir
+    elif project_id:
+        job_dir = os.path.join(get_project_dir(project_id), "output", f"{today_str}_{timestamp_str}")
     else:
         job_dir = os.path.join(OUTPUT_BASE_DIR, f"{today_str}_{timestamp_str}")
     os.makedirs(job_dir, exist_ok=True)
@@ -119,6 +131,7 @@ def run_pipeline(user_topic=None, user_hook=None, custom_scenes=None, aspect_rat
 
     manifest = {
         "created_at": now.strftime("%Y-%m-%d %H:%M:%S"),
+        "project_id": project_id,
         "aspect_ratio": selected_aspect,
         "theme": selected_theme,
         "topic": topic_data,

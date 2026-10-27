@@ -1,0 +1,35 @@
+{
+  "id": "ai-microservices-daily",
+  "name": "AI & Microservices Daily",
+  "description": "Square feed and shorts exploring Kafka event-driven pipelines, distributed systems, and modern AI automation.",
+  "category": "Distributed Systems & AI",
+  "aspect_ratio": "1:1",
+  "theme": "matrix_terminal",
+  "language": "en",
+  "voice": "en-US-AndrewMultilingualNeural",
+  "created_at": "2026-10-28 01:36:43",
+  "branding": {
+    "author": "Rsm Monaem",
+    "brand_name": "AI Systems",
+    "brand_tagline": "Autonomous Tech Engineering",
+    "cta_text": "Follow for daily insights"
+  },
+  "cron": {
+    "enabled": false,
+    "hour": 12,
+    "minute": 0
+  },
+  "llm": {
+    "provider": "template",
+    "api_key": "",
+    "model": "gemini-2.5-flash"
+  },
+  "audio": {
+    "provider": "edge_tts",
+    "edge_voice": "en-US-AndrewMultilingualNeural",
+    "elevenlabs_api_key": "",
+    "elevenlabs_voice_id": "j5PhP1QJv2DvlhRv3mEv",
+    "openai_api_key": "",
+    "enable_sfx": true
+  }
+}

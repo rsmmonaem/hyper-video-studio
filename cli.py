@@ -18,10 +18,11 @@ def main():
 
     # Run Pipeline
     p_run = subparsers.add_parser("run-pipeline", help="Generate a video pipeline run")
+    p_run.add_argument("--project", help="Target project ID")
     p_run.add_argument("--topic", help="Custom video topic")
     p_run.add_argument("--hook", help="Custom viral hook")
-    p_run.add_argument("--aspect", default="9:16", help="Aspect ratio (9:16, 16:9, 1:1, etc.)")
-    p_run.add_argument("--theme", default="cyber_cyan", help="Theme key")
+    p_run.add_argument("--aspect", default=None, help="Aspect ratio (9:16, 16:9, 1:1, etc.)")
+    p_run.add_argument("--theme", default=None, help="Theme key")
 
     # Dashboard
     p_dash = subparsers.add_parser("dashboard", help="Start web dashboard server")
@@ -40,6 +41,7 @@ def main():
 
     if args.command == "run-pipeline":
         manifest = run_pipeline(
+            project_id=args.project,
             user_topic=args.topic,
             user_hook=args.hook,
             aspect_ratio=args.aspect,
