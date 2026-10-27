@@ -1,0 +1,26 @@
+{
+  "facebook": "সার্ভারে হঠাৎ ১০ গুণ ট্রাফিক আসলে সিঙ্গেল সার্ভার ক্র্যাশ না করে কীভাবে লোড ভাগ করবেন? ⚡🛠️\n\nপ্রোডাকশন লেভেলে কাজ করতে গিয়ে আমরা প্রায়ই দেখি—কোড ঠিকঠাক রান করলেও ট্রাফিক বা ডেটাবেস সাইজ বাড়ার সাথে সাথেই পুরো সিস্টেম স্লো হয়ে যায়। \n\nআজকের টপিক: Nginx Reverse Proxy & High-Availability Load Balancing\nটেক স্ট্যাক: Nginx, Reverse Proxy, least_conn, Upstream, Load Balancing\n\n📌 মূল কারিগরি কারণ ও সমাধান:\nএনজিনিক্স রিভার্স প্রক্সি দিয়ে ইনকামিং ট্রাফিককে একাধিক ব্যাকএন্ড নোডে সমানভাবে ভাগ করে দিলে ০% সার্ভার ডাউনটাইম নিশ্চিত হয়।\n\n💡 সিনিয়র ডেভেলপার ও আর্কিটেক্টদের জন্য ৩টি গুরুত্বপূর্ণ টিপস:\n১. ডিফল্ট মেমরি ও থ্রেড লিমিট প্রোডাকশনে সরাসরি ব্যবহার করবেন না।\n২. ডেটাবেস কুয়েরির ক্ষেত্রে সঠিক ইনডেক্সিং ও ক্যাশিং লেয়ার নিশ্চিত করুন।\n৩. প্রতিটা রিলিজের পর পি৯৯ লেটেন্সি ও সিস্টেম লোড প্রোফাইল করুন।\n\n💬 আপনি আপনার প্রোডাকশন অ্যাপ্লিকেশনে এটি কীভাবে হ্যান্ডেল করেন? কমেন্টে আপনার অভিজ্ঞতা বা চ্যালেঞ্জ শেয়ার করুন! \n\nভিডিওটি সেভ করে রাখুন এবং আপনার ডেভেলপার বন্ধুদের সাথে শেয়ার করুন! 🚀\n\n#SoftwareEngineering #WebDevelopment #Backend #DevOps #Database #SystemDesign #BanglaTech #Coding #Programming #TechTips",
+  "youtube": {
+    "title": "সার্ভারে হঠাৎ ১০ গুণ ট্রাফিক আসলে সিঙ্গেল সার্ভার ক্র্যাশ না করে কীভাবে লোড ভাগ ... 🚀 #Shorts",
+    "description": "Nginx Reverse Proxy & High-Availability Load Balancing - রিয়েল-লাইফ সফটওয়্যার ইঞ্জিনিয়ারিং ও সিস্টেম ডিজাইন টিপস।\n\n📌 এই ভিডিওতে যা থাকছে:\n0:00 - সমস্যা চিহ্নিতকরণ\n0:07 - আর্কিটেকচার ড্রব্যাক ও বটলনেক\n0:16 - আধুনিক সলিউশন ও বেস্ট প্র্যাকটিস\n0:27 - প্রোডাকশন রেডি টেকনিক\n\nটেক স্ট্যাক: Nginx, Reverse Proxy, least_conn, Upstream, Load Balancing\nএনজিনিক্স রিভার্স প্রক্সি দিয়ে ইনকামিং ট্রাফিককে একাধিক ব্যাকএন্ড নোডে সমানভাবে ভাগ করে দিলে ০% সার্ভার ডাউনটাইম নিশ্চিত হয়।\n\n🔔 সফটওয়্যার আর্কিটেকচার, ডেভঅপ্স, ডাটাবেজ এবং হাই-স্কেল ব্যাকএন্ড নিয়ে প্রতিদিন নতুন ভিডিও পেতে সাবস্ক্রাইব করুন!\n\n#Shorts #TechBangla #SoftwareEngineering #DevOps #Database #SystemDesign #Coding #WebDevelopment",
+    "tags": [
+      "Tech Bangla",
+      "Software Engineering",
+      "System Design",
+      "DevOps",
+      "Database Engineering",
+      "Backend Development",
+      "Coding",
+      "Programming",
+      "Shorts",
+      "Nginx",
+      "Reverse Proxy",
+      "least_conn",
+      "Upstream",
+      "Load Balancing"
+    ],
+    "pinned_comment": "আজকের পর্বটি আপনার কেমন লাগল? আপনি প্রোডাকশনে Nginx ব্যবহার করছেন কি না কমেন্টে জানান! 👇"
+  },
+  "instagram": "সার্ভারে হঠাৎ ১০ গুণ ট্রাফিক আসলে সিঙ্গেল সার্ভার ক্র্যাশ না করে কীভাবে লোড ভাগ করবেন? 💡\n\nSwipe left for architectural breakdown ➡️\n\nTopic: Nginx Reverse Proxy & High-Availability Load Balancing\nStack: Nginx, Reverse Proxy, least_conn, Upstream, Load Balancing\n\nKey Highlights:\n• Identifying hidden performance bottlenecks\n• Production-grade architectural patterns\n• Avoiding common junior mistakes at scale\n\nSave this reel for your next system design interview! 📌\n\n.\n.\n#softwareengineer #developerlife #systemdesign #devops #backend #database #codingtips #techcommunity #banglacoding",
+  "linkedin": "Architecting for High Throughput: Nginx Reverse Proxy & High-Availability Load Balancing\n\nWhen scaling production services, bottlenecks rarely emerge from clean code logic itself. They almost always stem from resource contention, unindexed lookups, or unbuffered I/O.\n\nHere is a practical breakdown for software engineers & backend architects:\n\n🔹 The Problem:\nসার্ভারে হঠাৎ ১০ গুণ ট্রাফিক আসলে সিঙ্গেল সার্ভার ক্র্যাশ না করে কীভাবে লোড ভাগ করবেন?\n\n🔹 Core Tech Involved:\nNginx, Reverse Proxy, least_conn, Upstream, Load Balancing\n\n🔹 The Architectural Insight:\nএনজিনিক্স রিভার্স প্রক্সি দিয়ে ইনকামিং ট্রাফিককে একাধিক ব্যাকএন্ড নোডে সমানভাবে ভাগ করে দিলে ০% সার্ভার ডাউনটাইম নিশ্চিত হয়।\n\n🔹 Production Rules to Live By:\n1. Never trust default pooling or buffer allocations in high-concurrency environments.\n2. Always inspect execution plans and event-loop lag under synthetic load.\n3. Decouple long-running tasks using background queues or dedicated workers.\n\nHow do you tackle this pattern in your current architecture? I'd love to hear your insights in the comments below.\n\n#SoftwareEngineering #SystemDesign #DevOps #HighAvailability #BackendArchitecture #DatabaseEngineering"
+}

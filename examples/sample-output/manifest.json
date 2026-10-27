@@ -1,0 +1,22 @@
+{
+  "created_at": "2026-10-27 10:33:11",
+  "project_id": "ftltd-tech-reels",
+  "aspect_ratio": "9:16",
+  "theme": "fire_ember",
+  "topic": {
+    "category": "Load Balancing & Traffic Architecture",
+    "topic": "Nginx Reverse Proxy & High-Availability Load Balancing",
+    "hook": "সার্ভারে হঠাৎ ১০ গুণ ট্রাফিক আসলে সিঙ্গেল সার্ভার ক্র্যাশ না করে কীভাবে লোড ভাগ করবেন?",
+    "summary": "এনজিনিক্স রিভার্স প্রক্সি দিয়ে ইনকামিং ট্রাফিককে একাধিক ব্যাকএন্ড নোডে সমানভাবে ভাগ করে দিলে ০% সার্ভার ডাউনটাইম নিশ্চিত হয়।",
+    "core_tech": ["Nginx", "Reverse Proxy", "least_conn", "Upstream", "Load Balancing"]
+  },
+  "audio": {
+    "duration": 32.4,
+    "path": "2026-10-27_vertical_reel_voice.mp3"
+  },
+  "thumbnails": {
+    "16_9": "2026-10-27_dev_card_landscape.jpg",
+    "9_16": "2026-10-27_dev_card_portrait.jpg"
+  },
+  "video": "2026-10-27_vertical_reel.mp4"
+}

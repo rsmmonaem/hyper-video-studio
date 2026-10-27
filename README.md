@@ -11,9 +11,83 @@
 **An autonomous, multi-aspect-ratio developer video & thumbnail creation suite.**  
 *Produce 60fps seek-safe motion graphics, neural voiceovers, psychological dilemma hooks, and broadcast-grade thumbnails for YouTube, Reels, TikTok, and LinkedIn.*
 
-[Features](#-key-features) • [Quickstart](#-quickstart) • [VPS Deployment](#-vps--cloud-deployment) • [Dashboard](#-command--control-dashboard) • [Architecture](#-architecture) • [Custom Skills](#-extensible-skills-system)
+[Features](#-key-features) • [Production Showcase](#-production-showcase--live-output-sample) • [Quickstart](#-quickstart) • [VPS Deployment](#-vps--cloud-deployment) • [Dashboard](#-command--control-dashboard) • [Architecture](#-architecture) • [Custom Skills](#-extensible-skills-system)
 
 </div>
+
+---
+
+## 🎨 Production Showcase & Live Output Sample
+
+> **Production Topic:** Nginx Reverse Proxy & High-Availability Load Balancing  
+> **Viral Dilemma Hook:** *"সার্ভারে হঠাৎ ১০ গুণ ট্রাফিক আসলে সিঙ্গেল সার্ভার ক্র্যাশ না করে কীভাবে লোড ভাগ করবেন?"*  
+> **Output Assets:** 1080×1920 60fps Motion Video, Studio Bengali Neural Voiceover, High-Res Visual Cards & Multi-Platform Copy.
+
+<div align="center">
+
+<table>
+<tr>
+<th width="42%" align="center">📱 9:16 Vertical Reel & Audio (Playable)</th>
+<th width="58%" align="center">🖼️ Developer Infographics (1080×1350 & 1200×630)</th>
+</tr>
+<tr>
+<td align="center" valign="top">
+
+<video src="examples/sample-output/2026-10-27_vertical_reel.mp4" controls="controls" width="100%" style="max-height: 520px; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,212,255,0.25);">
+  <a href="examples/sample-output/2026-10-27_vertical_reel.mp4">▶️ Watch Sample Video (MP4)</a>
+</video>
+
+<br><br>
+
+**🎙️ Studio Bengali Voiceover (Audio):**
+<audio controls style="width: 100%; margin-top: 8px;">
+  <source src="examples/sample-output/2026-10-27_vertical_reel_voice.mp3" type="audio/mpeg">
+  Your browser does not support audio playback.
+</audio>
+
+<br>
+<sub>⚡ <b>Duration:</b> 32.4s • <b>Voice:</b> Native Bengali (bn-IN-BashkarNeural) • <b>Theme:</b> Fire Ember</sub>
+
+</td>
+<td align="center" valign="top">
+
+<a href="examples/sample-output/2026-10-27_dev_card_portrait.jpg" target="_blank">
+  <img src="examples/sample-output/2026-10-27_dev_card_portrait.jpg" width="92%" alt="Portrait Developer Card" style="border-radius: 12px; margin-bottom: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);">
+</a>
+
+<br>
+
+<a href="examples/sample-output/2026-10-27_dev_card_landscape.jpg" target="_blank">
+  <img src="examples/sample-output/2026-10-27_dev_card_landscape.jpg" width="92%" alt="Landscape Developer Card" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);">
+</a>
+
+</td>
+</tr>
+</table>
+
+</div>
+
+<details>
+<summary><b>📝 View Generated Multi-Platform Copy (YouTube Shorts, LinkedIn, Facebook, Instagram)</b></summary>
+<br>
+
+```json
+{
+  "youtube": {
+    "title": "সার্ভারে হঠাৎ ১০ গুণ ট্রাফিক আসলে সিঙ্গেল সার্ভার ক্র্যাশ না করে কীভাবে লোড ভাগ ... 🚀 #Shorts",
+    "description": "Nginx Reverse Proxy & High-Availability Load Balancing - রিয়েল-লাইফ সফটওয়্যার ইঞ্জিনিয়ারিং ও সিস্টেম ডিজাইন টিপস...",
+    "tags": ["Tech Bangla", "Software Engineering", "System Design", "DevOps", "Nginx", "Load Balancing"]
+  },
+  "linkedin": {
+    "text": "Architecting for High Throughput: Nginx Reverse Proxy & High-Availability Load Balancing\n\nWhen scaling production services, bottlenecks rarely emerge from clean code logic itself. They almost always stem from resource contention..."
+  },
+  "facebook": {
+    "text": "সার্ভারে হঠাৎ ১০ গুণ ট্রাফিক আসলে সিঙ্গেল সার্ভার ক্র্যাশ না করে কীভাবে লোড ভাগ করবেন? ⚡🛠️\n\nএনজিনিক্স রিভার্স প্রক্সি দিয়ে ইনকামিং ট্রাফিককে একাধিক ব্যাকএন্ড নোডে সমানভাবে ভাগ করে দিলে ০% সার্ভার ডাউনটাইম নিশ্চিত হয়..."
+  }
+}
+```
+
+</details>
 
 ---
 
@@ -67,7 +141,7 @@
 
 ### 1. Clone & Setup
 ```bash
-git clone https://github.com/your-username/hyper-video-studio.git
+git clone https://github.com/rsmmonaem/hyper-video-studio.git
 cd hyper-video-studio
 npm install
 pip install -r requirements.txt
