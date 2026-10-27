@@ -290,73 +290,91 @@
 
                         <!-- Mode Toggle -->
                         <div class="flex gap-3 bg-slate-900/60 p-1.5 rounded-xl border border-white/5">
-                            <button id="modeAutonomous" class="flex-1 py-2 px-3 text-xs font-bold rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/30" onclick="setCreationMode('autonomous')">
-                                🤖 Curated Blueprints (Free)
+                            <button id="modeScript" class="flex-1 py-2 px-3 text-xs font-bold rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/30" onclick="setCreationMode('script')">
+                                📜 Direct Script (100% Free / Paste from ChatGPT)
                             </button>
                             <button id="modeCustomTopic" class="flex-1 py-2 px-3 text-xs font-bold rounded-lg text-slate-400" onclick="setCreationMode('custom')">
-                                ✍️ Custom Topic & Hook
+                                🤖 AI Topic Generator (Topic &rarr; AI Script)
                             </button>
-                            <button id="modeScript" class="flex-1 py-2 px-3 text-xs font-bold rounded-lg text-slate-400" onclick="setCreationMode('script')">
-                                📜 Multi-Scene Script
+                            <button id="modeAutonomous" class="flex-1 py-2 px-3 text-xs font-bold rounded-lg text-slate-400" onclick="setCreationMode('autonomous')">
+                                📚 Channel Blueprints
                             </button>
                         </div>
 
-                        <!-- Autonomous Blueprint Mode -->
-                        <div id="boxAutonomous" class="p-4 rounded-xl bg-cyan-950/20 border border-cyan-500/20 text-sm space-y-3">
+                        <!-- 1. Direct Custom Script Mode (Zero Cost / Full Control) -->
+                        <div id="boxScript" class="space-y-4">
+                            <div class="p-3.5 rounded-xl bg-cyan-950/20 border border-cyan-500/20 text-xs text-cyan-200 flex items-start gap-2.5">
+                                <i data-lucide="check-circle" class="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5"></i>
+                                <div>
+                                    <div class="font-bold">জিরো-কস্ট মোড (Zero API Key Required):</div>
+                                    <div class="text-slate-400 text-[11px] mt-0.5">আপনার নিজের লেখা বা ChatGPT / Gemini-র ফ্রি ওয়েবসাইট থেকে কপি করা বাংলা স্ক্রিপ্ট এখানে দিন। কোনো এআই API বা খরচ ছাড়াই আপনার হুবহু কথা দিয়ে ৬০fps ভিডিও ও থাম্বনেইল তৈরি হবে।</div>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-300 mb-1">Scene 1: High Stakes Hook (0-7s) <span class="text-cyan-400">*</span></label>
+                                    <input type="text" id="scene1Input" class="input-field text-xs" placeholder="e.g. ভিডিও এডিটিং শিখে নিজের ক্যারিয়ার গড়ুন! CapCut ও Premiere Pro দিয়ে শুরু করুন..." onchange="autoSaveDraft()">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-400 mb-1">Scene 2: Problem Dilemma (7-15s)</label>
+                                    <input type="text" id="scene2Input" class="input-field text-xs" placeholder="e.g. সঠিক রোডম্যাপ ও প্র্যাকটিসের অভাব থাকলে টুলস শিখতে গিয়ে অনেক সময় নষ্ট হয়..." onchange="autoSaveDraft()">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-400 mb-1">Scene 3: Solution & Workflow (15-27s)</label>
+                                    <input type="text" id="scene3Input" class="input-field text-xs" placeholder="e.g. ক্যাপকাট দিয়ে বেসিক এবং প্রিমিয়ার প্রো দিয়ে অ্যাডভান্সড কালার গ্রেডিং শিখে পোর্টফোলিও বানান..." onchange="autoSaveDraft()">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-400 mb-1">Scene 4: Call to Action & Outro (27-35s)</label>
+                                    <input type="text" id="scene4Input" class="input-field text-xs" placeholder="e.g. ভিডিও এডিটিংয়ের নিয়মিত ক্যারিয়ার গাইডলাইনের জন্য এখনই সাবস্ক্রাইব করুন!" onchange="autoSaveDraft()">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. AI Topic Generator Inputs -->
+                        <div id="boxCustom" class="space-y-4 hidden">
+                            <div class="p-3.5 rounded-xl bg-purple-950/20 border border-purple-500/20 text-xs text-purple-200 flex items-start gap-2.5">
+                                <i data-lucide="sparkles" class="w-4 h-4 text-purple-400 flex-shrink-0 mt-0.5"></i>
+                                <div>
+                                    <div class="font-bold">AI অটোমেটিক স্ক্রিপ্ট জেনারেশন:</div>
+                                    <div class="text-slate-400 text-[11px] mt-0.5">শুধু টপিক লিখলে এআই স্বয়ংক্রিয়ভাবে প্রাসঙ্গিক হুক ও ৪টি সিনের স্ক্রিপ্ট লিখে দেবে। এর জন্য 'AI & LLM Engine' ট্যাবে সম্পূর্ণ ফ্রি Gemini API Key বা OpenAI ব্যবহার করতে পারবেন।</div>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Topic Title (Bengali or English)</label>
+                                    <input type="text" id="customTopicInput" class="input-field text-sm" placeholder="e.g. CapCut vs Premiere Pro for Beginners" onchange="autoSaveDraft()">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Viral Hook (Optional - Leave blank for AI hook)</label>
+                                    <input type="text" id="customHookInput" class="input-field text-sm" placeholder="e.g. ভিডিও এডিটিং শুরু করতে কোনটা সেরা?" onchange="autoSaveDraft()">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Channel Blueprints Mode -->
+                        <div id="boxAutonomous" class="p-4 rounded-xl bg-slate-900/60 border border-white/5 text-sm space-y-3 hidden">
                             <div class="flex justify-between items-center">
-                                <p class="text-cyan-200 font-semibold flex items-center gap-2 text-xs">
-                                    <i data-lucide="check-circle" class="w-4 h-4 text-cyan-400"></i>
-                                    Curated Architectural Blueprints (100% Free / Zero API Cost)
+                                <p class="text-slate-200 font-semibold flex items-center gap-2 text-xs">
+                                    <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
+                                    Channel Blueprint Library (Instant Templates)
                                 </p>
                             </div>
                             <p class="text-slate-400 text-xs">
-                                Automatically plans high-retention engineering dilemma hooks based on this project's niche category. Or choose a quick topic below:
+                                এই চ্যানেলের নিশ অনুযায়ী তৈরি করা প্রি-মেড টেমপ্লেট থেকে দ্রুত সিলেক্ট করতে পারেন:
                             </p>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 text-xs">
+                                <button type="button" class="p-2.5 rounded-lg border border-white/5 bg-slate-900/60 hover:border-cyan-400 text-left text-slate-300 hover:text-cyan-300 transition-all" onclick="pickQuickTopic('CapCut vs Adobe Premiere Pro', 'ভিডিও এডিটিং শিখে ক্যারিয়ার গড়তে ক্যাপকাট নাকি প্রিমিয়ার প্রো—কোনটা দিয়ে শুরু করবেন?')">
+                                    🎬 CapCut vs Premiere Pro Career Mastery
+                                </button>
+                                <button type="button" class="p-2.5 rounded-lg border border-white/5 bg-slate-900/60 hover:border-cyan-400 text-left text-slate-300 hover:text-cyan-300 transition-all" onclick="pickQuickTopic('4K Color Grading Optimization', 'সাধারণ ক্যামেরার ফুটেজকেও সিনেমাটিক প্রিমিয়াম লুকে কীভাবে কনভার্ট করবেন?')">
+                                    🎨 4K Color Grading & Cinematic Look
+                                </button>
                                 <button type="button" class="p-2.5 rounded-lg border border-white/5 bg-slate-900/60 hover:border-cyan-400 text-left text-slate-300 hover:text-cyan-300 transition-all" onclick="pickQuickTopic('Nginx Reverse Proxy & High Availability', 'সার্ভারে হঠাৎ ১০ গুণ ট্রাফিক আসলে সিঙ্গেল সার্ভার ক্র্যাশ না করে কীভাবে লোড ভাগ করবেন?')">
                                     🔥 Nginx Reverse Proxy & Load Balancing
                                 </button>
                                 <button type="button" class="p-2.5 rounded-lg border border-white/5 bg-slate-900/60 hover:border-cyan-400 text-left text-slate-300 hover:text-cyan-300 transition-all" onclick="pickQuickTopic('PostgreSQL Composite Indexing', 'কোটি কোটি রো থাকা সত্ত্বেও প্রোডাকশন কুয়েরি কেন মাত্র ৩ মিলিসেকেন্ডে রেজাল্ট দেয়?')">
                                     ⚡ PostgreSQL B-Tree Indexing Optimization
                                 </button>
-                                <button type="button" class="p-2.5 rounded-lg border border-white/5 bg-slate-900/60 hover:border-cyan-400 text-left text-slate-300 hover:text-cyan-300 transition-all" onclick="pickQuickTopic('Redis Cache-Aside Pattern', 'মিলিয়ন ট্রাফিকের চাপেও ডেটাবেস সুরক্ষিত রেখে রেসপন্স টাইম ১০ মিলিসেকেন্ডে কীভাবে রাখবেন?')">
-                                    🚀 Redis In-Memory Cache Aside
-                                </button>
-                                <button type="button" class="p-2.5 rounded-lg border border-white/5 bg-slate-900/60 hover:border-cyan-400 text-left text-slate-300 hover:text-cyan-300 transition-all" onclick="pickQuickTopic('Docker Blue-Green Zero Downtime', 'ব্যবহারকারীদের ৫xx এরর না দেখিয়ে কীভাবে লাইভ প্রোডাকশন ভার্সন সেকেন্ডের মধ্যে আপগ্রেড করবেন?')">
-                                    🐳 Docker Blue-Green Deployment
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Custom Topic Inputs -->
-                        <div id="boxCustom" class="space-y-4 hidden">
-                            <div>
-                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Topic Title (Bengali or English)</label>
-                                <input type="text" id="customTopicInput" class="input-field text-sm" placeholder="e.g. Kubernetes Horizontal Pod Autoscaling" onchange="autoSaveDraft()">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Psychological Hook (Viral Dilemma)</label>
-                                <input type="text" id="customHookInput" class="input-field text-sm" placeholder="e.g. ট্রাফিক হঠাৎ ১০ গুণ বাড়লে পড কীভাবে অটো-স্কেল করবে?" onchange="autoSaveDraft()">
-                            </div>
-                        </div>
-
-                        <!-- Script Editor Inputs -->
-                        <div id="boxScript" class="space-y-3 hidden">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-400 mb-1">Scene 1: High Stakes Hook (0-7s)</label>
-                                <input type="text" id="scene1Input" class="input-field text-xs" placeholder="Bengali spoken script for scene 1..." onchange="autoSaveDraft()">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-400 mb-1">Scene 2: Problem Dilemma (7-15s)</label>
-                                <input type="text" id="scene2Input" class="input-field text-xs" placeholder="Bengali spoken script for scene 2..." onchange="autoSaveDraft()">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-400 mb-1">Scene 3: Scalable Architecture (15-27s)</label>
-                                <input type="text" id="scene3Input" class="input-field text-xs" placeholder="Bengali spoken script for scene 3..." onchange="autoSaveDraft()">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-400 mb-1">Scene 4: Production Rules & Outro (27-35s)</label>
-                                <input type="text" id="scene4Input" class="input-field text-xs" placeholder="Bengali spoken script for scene 4..." onchange="autoSaveDraft()">
                             </div>
                         </div>
 

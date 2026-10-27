@@ -3,8 +3,8 @@
   "name": "Video Editor",
   "description": "Autonomous developer video project",
   "category": "Video Editing & Production",
-  "aspect_ratio": "1:1",
-  "theme": "clean_minimal",
+  "aspect_ratio": "4:5",
+  "theme": "fire_ember",
   "language": "bn",
   "voice": "bn-BD-PradeepNeural",
   "created_at": "2026-10-28 02:06:18",
@@ -34,13 +34,13 @@
     "enable_sfx": true
   },
   "draft": {
-    "mode": "script",
-    "topic": "Video Editing: CapCut & Adobe Premiere Pro",
-    "hook": "ভিডিও এডিটিং শিখে নিজের ক্যারিয়ার গড়ুন! 🎬 CapCut ও Adobe Premiere Pro দিয়ে শুরু করুন, প্রতিদিন প্র্যাকটিস করুন, পোর্টফোলিও তৈরি করুন",
+    "mode": "custom",
+    "topic": "ডাক্তার হতে হলে প্রয়োজন কঠোর পরিশ্রম, মনোযোগ দিয়ে পড়াশোনা এবং মানুষের সেবা করার মানসিকতা। স্বপ্ন দেখুন, প্রস্তুতি নিন, আর এগিয়ে যান আপনার লক্ষ্যের পথে!",
+    "hook": "ডাক্তার হতে হলে প্রয়োজন কঠোর পরিশ্রম, মনোযোগ দিয়ে পড়াশোনা এবং মানুষের সেবা করার মানসিকতা। স্বপ্ন দেখুন, প্রস্তুতি নিন, আর এগিয়ে যান আপনার লক্ষ্যের পথে!",
     "scene_1": "ভিডিও এডিটিং শিখে নিজের ক্যারিয়ার গড়ুন! 🎬 CapCut ও Adobe Premiere Pro দিয়ে শুরু করুন, প্রতিদিন প্র্যাকটিস করুন, পোর্টফোলিও তৈরি করুন",
     "scene_2": "",
     "scene_3": "",
     "scene_4": ""
   },
-  "updated_at": "2026-10-28 02:30:58"
+  "updated_at": "2026-10-28 02:37:29"
 }
