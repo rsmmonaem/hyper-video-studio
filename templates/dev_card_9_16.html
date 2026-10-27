@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1920">
+    <title>Nginx Reverse Proxy & Load Balancing - 9:16 Developer Card</title>
+    <!-- Google Fonts for 100% Flawless Bengali & JetBrains Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff6600;
+            --primary-glow: rgba(255, 102, 0, 0.45);
+            --secondary: #ff9900;
+            --cyan: #00d4ff;
+            --cyan-glow: rgba(0, 212, 255, 0.4);
+            --emerald: #10b981;
+            --card-bg: rgba(18, 11, 8, 0.88);
+            --border-glow: rgba(255, 102, 0, 0.35);
+            --text-primary: #ffffff;
+            --text-secondary: #fdba74;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 1080px;
+            height: 1920px;
+            overflow: hidden;
+            background: linear-gradient(175deg, #100602 0%, #1e0b04 35%, #2a1106 65%, #0d0401 100%);
+            font-family: 'Hind Siliguri', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 80px 65px;
+        }
+
+        /* Ambient Cyber Lighting */
+        .ambient-orb-1 {
+            position: absolute;
+            top: -160px;
+            left: -160px;
+            width: 650px;
+            height: 650px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            filter: blur(140px);
+            opacity: 0.65;
+            pointer-events: none;
+        }
+
+        .ambient-orb-2 {
+            position: absolute;
+            bottom: -140px;
+            right: -140px;
+            width: 680px;
+            height: 680px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--cyan) 0%, transparent 70%);
+            filter: blur(150px);
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        .cyber-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255, 102, 0, 0.08) 1.5px, transparent 1.5px),
+                linear-gradient(90deg, rgba(255, 102, 0, 0.08) 1.5px, transparent 1.5px);
+            background-size: 72px 72px;
+            pointer-events: none;
+        }
+
+        .vignette-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 35%, rgba(0, 0, 0, 0.78) 100%);
+            pointer-events: none;
+        }
+
+        /* Outer Frame Border with Corner Neon Accents */
+        .neon-frame {
+            position: absolute;
+            inset: 32px;
+            border: 2px solid var(--border-glow);
+            border-radius: 36px;
+            pointer-events: none;
+            box-shadow: inset 0 0 35px var(--primary-glow), 0 0 40px var(--primary-glow);
+        }
+
+        /* Top Header Row */
+        .top-row {
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .badge-category {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 28px;
+            border-radius: 9999px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 21px;
+            font-weight: 800;
+            box-shadow: 0 0 25px var(--primary-glow);
+            backdrop-filter: blur(16px);
+        }
+
+        .pulsing-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 0 14px var(--primary);
+        }
+
+        .brand-author {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 22px;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            padding: 12px 26px;
+            border-radius: 14px;
+            backdrop-filter: blur(12px);
+            letter-spacing: 1px;
+        }
+
+        /* Main Hero Hook Section */
+        .hero-section {
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        .dilemma-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 20px;
+            font-weight: 800;
+            color: #ff5f56;
+            background: rgba(255, 95, 86, 0.16);
+            border: 1.5px solid #ff5f56;
+            padding: 8px 22px;
+            border-radius: 10px;
+            width: fit-content;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-title {
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.25;
+            color: #ffffff;
+            text-shadow: 0 6px 28px rgba(0, 0, 0, 0.9);
+        }
+
+        .hero-title .highlight {
+            color: #ff9900;
+            background: linear-gradient(180deg, #ffaa00 0%, #ff6600 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px var(--primary-glow));
+        }
+
+        .topic-pill {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* 3D Glassmorphism Architecture Window */
+        .window-card {
+            z-index: 10;
+            background: var(--card-bg);
+            border: 2px solid var(--border-glow);
+            border-radius: 28px;
+            padding: 38px 42px;
+            box-shadow: 0 25px 65px rgba(0, 0, 0, 0.75), 0 0 35px var(--primary-glow);
+            backdrop-filter: blur(24px);
+            display: flex;
+            flex-direction: column;
+            gap: 26px;
+        }
+
+        /* Window Header Bar */
+        .window-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 102, 0, 0.25);
+        }
+
+        .mac-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+        }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .window-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 20px;
+            color: var(--text-muted);
+            margin-left: 12px;
+        }
+
+        /* Visual Architecture Flow */
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .flow-gateway {
+            background: rgba(0, 0, 0, 0.65);
+            border: 1.5px solid var(--cyan);
+            border-radius: 16px;
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 20px var(--cyan-glow);
+        }
+
+        .gateway-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--cyan);
+        }
+
+        .gateway-stat {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            background: rgba(0, 212, 255, 0.18);
+            padding: 6px 14px;
+            border-radius: 8px;
+        }
+
+        .flow-arrow-down {
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 22px;
+            color: var(--primary);
+            font-weight: 800;
+            letter-spacing: 4px;
+        }
+
+        /* Cluster Nodes Grid */
+        .nodes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .cluster-node {
+            background: rgba(0, 0, 0, 0.55);
+            border: 1.5px solid rgba(255, 102, 0, 0.4);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .node-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            font-weight: 800;
+            color: #fdba74;
+        }
+
+        .node-metric {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 15px;
+            color: var(--text-muted);
+        }
+
+        .node-badge-ok {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 800;
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid #10b981;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        /* Summary Block */
+        .summary-box {
+            background: rgba(255, 102, 0, 0.08);
+            border-left: 5px solid var(--primary);
+            border-radius: 0 14px 14px 0;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .summary-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 20px;
+            font-weight: 800;
+            color: #ffaa00;
+        }
+
+        .summary-text {
+            font-size: 27px;
+            line-height: 1.45;
+            color: #f8fafc;
+            font-weight: 600;
+        }
+
+        /* Production Rules */
+        .rules-card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 24px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .rules-header {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 21px;
+            font-weight: 800;
+            color: var(--emerald);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rules-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 23px;
+            line-height: 1.4;
+            color: #e2e8f0;
+            font-weight: 600;
+        }
+
+        .rules-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        /* Bottom Row */
+        .bottom-row {
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .tags-wrapper {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            max-width: 640px;
+        }
+
+        .tech-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 19px;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #fdba74;
+            padding: 8px 18px;
+            border-radius: 10px;
+        }
+
+        .cta-button {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 25px;
+            font-weight: 900;
+            padding: 16px 36px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary) 0%, #ff9900 100%);
+            color: #000000;
+            box-shadow: 0 0 35px var(--primary-glow);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-orb-1"></div>
+    <div class="ambient-orb-2"></div>
+    <div class="cyber-grid"></div>
+    <div class="vignette-overlay"></div>
+    <div class="neon-frame"></div>
+
+    <!-- 1. Top Header -->
+    <div class="top-row">
+        <div class="badge-category">
+            <span class="pulsing-dot"></span>
+            <span>// TRAFFIC & SCALING ARCHITECTURE //</span>
+        </div>
+        <div class="brand-author">FTLTD • Rsm Monaem</div>
+    </div>
+
+    <!-- 2. Hero Hook Section -->
+    <div class="hero-section">
+        <div class="dilemma-kicker">🚨 10X FLASH TRAFFIC DILEMMA</div>
+        <h1 class="hero-title">
+            সার্ভারে হঠাৎ ১০ গুণ ট্রাফিক আসলে সিঙ্গেল সার্ভার ক্র্যাশ না করে কীভাবে <span class="highlight">লোড ভাগ করবেন?</span>
+        </h1>
+        <div class="topic-pill">
+            <span>⚙️ SYSTEM DESIGN:</span> Nginx Reverse Proxy & High Availability
+        </div>
+    </div>
+
+    <!-- 3. 3D Developer Glass Window -->
+    <div class="window-card">
+        <div class="window-header">
+            <span class="mac-dot dot-red"></span>
+            <span class="mac-dot dot-yellow"></span>
+            <span class="mac-dot dot-green"></span>
+            <span class="window-title">~/production/nginx_ha_cluster.conf</span>
+        </div>
+
+        <div class="flow-container">
+            <div class="flow-gateway">
+                <span class="gateway-title">⚡ NGINX REVERSE PROXY HUB [least_conn]</span>
+                <span class="gateway-stat">0% Packet Drop</span>
+            </div>
+            
+            <div class="flow-arrow-down">▼ ▼ ▼</div>
+
+            <div class="nodes-grid">
+                <div class="cluster-node">
+                    <span class="node-name">Worker Node A</span>
+                    <span class="node-metric">CPU: 28% | 3ms</span>
+                    <span class="node-badge-ok">ACTIVE</span>
+                </div>
+                <div class="cluster-node">
+                    <span class="node-name">Worker Node B</span>
+                    <span class="node-metric">CPU: 32% | 4ms</span>
+                    <span class="node-badge-ok">ACTIVE</span>
+                </div>
+                <div class="cluster-node">
+                    <span class="node-name">Worker Node C</span>
+                    <span class="node-metric">CPU: 25% | 3ms</span>
+                    <span class="node-badge-ok">ACTIVE</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-box">
+            <span class="summary-label">📌 প্রোডাকশন সমাধান:</span>
+            <p class="summary-text">
+                এনজিনিক্স রিভার্স প্রক্সি দিয়ে ইনকামিং ট্রাফিককে একাধিক ব্যাকএন্ড নোডে সমানভাবে ভাগ করে দিলে ০% সার্ভার ডাউনটাইম নিশ্চিত হয়।
+            </p>
+        </div>
+
+        <div class="rules-card">
+            <div class="rules-header">
+                <span>💡 সিনিয়র ইঞ্জিনিয়ারিং রুলস:</span>
+            </div>
+            <div class="rules-list">
+                <div class="rules-item">
+                    <span>১.</span>
+                    <span>ডিফল্ট মেমরি ও বাফার সাইজে কখনো হাই-কনকারেন্সিতে ভরসা করবেন না।</span>
+                </div>
+                <div class="rules-item">
+                    <span>২.</span>
+                    <span>আপস্ট্রিম কনফিগে least_conn ও হেলথ-চেক সক্রিয় রাখুন।</span>
+                </div>
+                <div class="rules-item">
+                    <span>৩.</span>
+                    <span>প্রতিটি রিলিজের পর পিক ট্রাফিকে পি৯৯ লেটেন্সি সার্বক্ষণিক মনিটর করুন।</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Bottom Row -->
+    <div class="bottom-row">
+        <div class="tags-wrapper">
+            <div class="tech-tag">#Nginx</div>
+            <div class="tech-tag">#ReverseProxy</div>
+            <div class="tech-tag">#LoadBalancing</div>
+            <div class="tech-tag">#DevOps</div>
+            <div class="tech-tag">#HighAvailability</div>
+        </div>
+        <div class="cta-button">WATCH REEL ⚡</div>
+    </div>
+</body>
+</html>

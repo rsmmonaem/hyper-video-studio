@@ -21,14 +21,14 @@
 
 > **Production Topic:** Nginx Reverse Proxy & High-Availability Load Balancing  
 > **Viral Dilemma Hook:** *"সার্ভারে হঠাৎ ১০ গুণ ট্রাফিক আসলে সিঙ্গেল সার্ভার ক্র্যাশ না করে কীভাবে লোড ভাগ করবেন?"*  
-> **Output Assets:** 1080×1920 60fps Motion Video, Studio Bengali Neural Voiceover, High-Res Visual Cards & Multi-Platform Copy.
+> **Output Assets:** 1080×1920 60fps Motion Video, Studio Bengali Neural Voiceover, 1080×1920 (9:16) Developer Visual Card & Multi-Platform Copy.
 
 <div align="center">
 
 <table>
 <tr>
 <th width="42%" align="center">📱 9:16 Vertical Reel & Audio (Playable)</th>
-<th width="58%" align="center">🖼️ Developer Infographics (1080×1350 & 1200×630)</th>
+<th width="58%" align="center">🖼️ 9:16 Developer Card (1080×1920) & Landscape (1200×630)</th>
 </tr>
 <tr>
 <td align="center" valign="top">
