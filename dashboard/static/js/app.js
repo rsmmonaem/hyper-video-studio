@@ -207,11 +207,8 @@ async function loadProjectStudio(projectId, silent = false) {
         activeAspect = currentProjectData.aspect_ratio || "9:16";
         activeTheme = currentProjectData.theme || "cyber_cyan";
 
-        document.querySelectorAll(".aspect-card").forEach(c => {
-            const txt = c.querySelector("div").textContent.trim();
-            if (txt === activeAspect) c.classList.add("selected");
-            else c.classList.remove("selected");
-        });
+        selectAspect(activeAspect);
+        selectTheme(activeTheme);
 
         // Set switcher select value
         const switcher = document.getElementById("projectSwitcherSelect");
@@ -266,17 +263,41 @@ function setCreationMode(mode) {
     }
 }
 
-function selectAspect(aspect) {
+function selectAspect(aspect, el) {
     activeAspect = aspect;
-    document.querySelectorAll(".aspect-card").forEach(c => c.classList.remove("selected"));
-    event.currentTarget.classList.add("selected");
-    document.getElementById("labelActiveAspect").textContent = `${aspect}`;
+    document.querySelectorAll(".aspect-card").forEach(c => {
+        c.classList.remove("selected", "border-cyan-400");
+    });
+    const target = el || document.querySelector(`.aspect-card[data-aspect="${aspect}"]`);
+    if (target) {
+        target.classList.add("selected", "border-cyan-400");
+    }
+    const label = document.getElementById("labelActiveAspect");
+    if (label) label.textContent = `${aspect}`;
 }
 
-function selectTheme(theme) {
+function selectTheme(theme, el) {
     activeTheme = theme;
-    document.querySelectorAll(".theme-card").forEach(c => c.classList.remove("selected", "border-cyan-500/40", "bg-cyan-950/20"));
-    event.currentTarget.classList.add("selected", "border-cyan-500/40", "bg-cyan-950/20");
+    document.querySelectorAll(".theme-card").forEach(c => {
+        c.classList.remove("selected", "border-cyan-400", "border-orange-400", "bg-cyan-950/40", "bg-orange-950/30", "shadow-lg");
+        c.classList.add("border-white/5", "bg-slate-900/40");
+    });
+    const target = el || document.querySelector(`.theme-card[data-theme="${theme}"]`);
+    if (target) {
+        target.classList.remove("border-white/5", "bg-slate-900/40");
+        target.classList.add("selected", "border-cyan-400", "bg-cyan-950/40", "shadow-lg");
+    }
+    const label = document.getElementById("labelCurrentTheme");
+    if (label) {
+        const names = {
+            "cyber_cyan": "Cyber Cyan",
+            "fire_ember": "Fire Ember",
+            "matrix_terminal": "Matrix Terminal",
+            "tokyo_neon": "Tokyo Midnight",
+            "clean_minimal": "Studio Obsidian"
+        };
+        label.textContent = names[theme] || theme;
+    }
 }
 
 async function triggerRun() {

@@ -5,9 +5,35 @@ Hyper Video Studio - Global Configuration & Settings Manager
 
 import os
 import json
+import shutil
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONFIG_PATH = os.path.join(BASE_DIR, "config.json")
+
+def normalize_env_path():
+    extra_paths = ["/opt/homebrew/bin", "/usr/local/bin", "/usr/bin", "/bin", "/usr/sbin", "/sbin"]
+    curr_path = os.environ.get("PATH", "")
+    new_parts = [p for p in extra_paths if p not in curr_path]
+    if new_parts:
+        os.environ["PATH"] = ":".join(new_parts) + ":" + curr_path
+
+normalize_env_path()
+
+def find_node():
+    normalize_env_path()
+    candidates = ["/opt/homebrew/bin/node", "/usr/local/bin/node", "/usr/bin/node", "node"]
+    for c in candidates:
+        if os.path.exists(c) or shutil.which(c):
+            return c
+    return "node"
+
+def find_ffmpeg():
+    normalize_env_path()
+    candidates = ["/opt/homebrew/bin/ffmpeg", "/usr/local/bin/ffmpeg", "/usr/bin/ffmpeg", "ffmpeg"]
+    for c in candidates:
+        if os.path.exists(c) or shutil.which(c):
+            return c
+    return "ffmpeg"
 
 ASPECT_RATIOS = {
     "9:16": {"width": 1080, "height": 1920, "name": "Vertical Reels/Shorts/TikTok (1080x1920)"},

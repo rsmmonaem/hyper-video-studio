@@ -9,6 +9,9 @@ Usage:
 
 import sys
 import argparse
+from core.config import normalize_env_path
+normalize_env_path()
+
 from core.pipeline import run_pipeline
 from core.cron_manager import get_scheduler_status, install_scheduler, remove_scheduler
 

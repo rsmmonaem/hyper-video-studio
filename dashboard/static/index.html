@@ -201,27 +201,27 @@
                         <div class="space-y-3 pt-3 border-t border-white/5">
                             <label class="block text-xs font-bold uppercase tracking-wider text-slate-400">Video Aspect Ratio</label>
                             <div class="grid grid-cols-3 sm:grid-cols-6 gap-2.5">
-                                <div class="aspect-card selected" onclick="selectAspect('9:16')">
+                                <div class="aspect-card" data-aspect="9:16" onclick="selectAspect('9:16', this)">
                                     <div class="text-xs font-bold text-cyan-300">9:16</div>
                                     <div class="text-[10px] text-slate-400 mt-0.5">Shorts/Reel</div>
                                 </div>
-                                <div class="aspect-card" onclick="selectAspect('16:9')">
+                                <div class="aspect-card" data-aspect="16:9" onclick="selectAspect('16:9', this)">
                                     <div class="text-xs font-bold text-slate-200">16:9</div>
                                     <div class="text-[10px] text-slate-400 mt-0.5">YouTube/TV</div>
                                 </div>
-                                <div class="aspect-card" onclick="selectAspect('1:1')">
+                                <div class="aspect-card" data-aspect="1:1" onclick="selectAspect('1:1', this)">
                                     <div class="text-xs font-bold text-slate-200">1:1</div>
                                     <div class="text-[10px] text-slate-400 mt-0.5">Square</div>
                                 </div>
-                                <div class="aspect-card" onclick="selectAspect('4:5')">
+                                <div class="aspect-card" data-aspect="4:5" onclick="selectAspect('4:5', this)">
                                     <div class="text-xs font-bold text-slate-200">4:5</div>
                                     <div class="text-[10px] text-slate-400 mt-0.5">IG Feed</div>
                                 </div>
-                                <div class="aspect-card" onclick="selectAspect('4:3')">
+                                <div class="aspect-card" data-aspect="4:3" onclick="selectAspect('4:3', this)">
                                     <div class="text-xs font-bold text-slate-200">4:3</div>
                                     <div class="text-[10px] text-slate-400 mt-0.5">Classic</div>
                                 </div>
-                                <div class="aspect-card" onclick="selectAspect('3:4')">
+                                <div class="aspect-card" data-aspect="3:4" onclick="selectAspect('3:4', this)">
                                     <div class="text-xs font-bold text-slate-200">3:4</div>
                                     <div class="text-[10px] text-slate-400 mt-0.5">Tall</div>
                                 </div>
@@ -232,27 +232,27 @@
                         <div class="space-y-3 pt-3 border-t border-white/5">
                             <label class="block text-xs font-bold uppercase tracking-wider text-slate-400">Aesthetic Visual Theme</label>
                             <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                <div class="p-3 rounded-xl border border-cyan-500/40 bg-cyan-950/20 cursor-pointer theme-card selected" onclick="selectTheme('cyber_cyan')">
+                                <div class="p-3 rounded-xl border border-white/5 bg-slate-900/40 cursor-pointer theme-card transition-all" data-theme="cyber_cyan" onclick="selectTheme('cyber_cyan', this)">
                                     <div class="w-full h-3 rounded bg-gradient-to-r from-cyan-400 to-blue-500 mb-2"></div>
                                     <div class="text-xs font-bold text-cyan-300">Cyber Cyan</div>
                                     <div class="text-[10px] text-slate-400">Obsidian & Neon Blue</div>
                                 </div>
-                                <div class="p-3 rounded-xl border border-white/5 bg-slate-900/40 cursor-pointer theme-card" onclick="selectTheme('fire_ember')">
+                                <div class="p-3 rounded-xl border border-white/5 bg-slate-900/40 cursor-pointer theme-card transition-all" data-theme="fire_ember" onclick="selectTheme('fire_ember', this)">
                                     <div class="w-full h-3 rounded bg-gradient-to-r from-orange-500 to-amber-500 mb-2"></div>
-                                    <div class="text-xs font-bold text-slate-200">Fire Ember</div>
+                                    <div class="text-xs font-bold text-orange-300">Fire Ember</div>
                                     <div class="text-[10px] text-slate-400">Charcoal & Orange</div>
                                 </div>
-                                <div class="p-3 rounded-xl border border-white/5 bg-slate-900/40 cursor-pointer theme-card" onclick="selectTheme('matrix_terminal')">
+                                <div class="p-3 rounded-xl border border-white/5 bg-slate-900/40 cursor-pointer theme-card transition-all" data-theme="matrix_terminal" onclick="selectTheme('matrix_terminal', this)">
                                     <div class="w-full h-3 rounded bg-gradient-to-r from-emerald-500 to-green-500 mb-2"></div>
-                                    <div class="text-xs font-bold text-slate-200">Matrix Terminal</div>
+                                    <div class="text-xs font-bold text-emerald-300">Matrix Terminal</div>
                                     <div class="text-[10px] text-slate-400">Hacker Green</div>
                                 </div>
-                                <div class="p-3 rounded-xl border border-white/5 bg-slate-900/40 cursor-pointer theme-card" onclick="selectTheme('tokyo_neon')">
+                                <div class="p-3 rounded-xl border border-white/5 bg-slate-900/40 cursor-pointer theme-card transition-all" data-theme="tokyo_neon" onclick="selectTheme('tokyo_neon', this)">
                                     <div class="w-full h-3 rounded bg-gradient-to-r from-purple-500 to-pink-500 mb-2"></div>
-                                    <div class="text-xs font-bold text-slate-200">Tokyo Midnight</div>
+                                    <div class="text-xs font-bold text-purple-300">Tokyo Midnight</div>
                                     <div class="text-[10px] text-slate-400">Royal Violet</div>
                                 </div>
-                                <div class="p-3 rounded-xl border border-white/5 bg-slate-900/40 cursor-pointer theme-card" onclick="selectTheme('clean_minimal')">
+                                <div class="p-3 rounded-xl border border-white/5 bg-slate-900/40 cursor-pointer theme-card transition-all" data-theme="clean_minimal" onclick="selectTheme('clean_minimal', this)">
                                     <div class="w-full h-3 rounded bg-gradient-to-r from-slate-200 to-slate-400 mb-2"></div>
                                     <div class="text-xs font-bold text-slate-200">Studio Obsidian</div>
                                     <div class="text-[10px] text-slate-400">Monochrome Titanium</div>
@@ -276,6 +276,10 @@
                             <div class="flex justify-between text-xs">
                                 <span class="text-slate-400">Aspect Ratio:</span>
                                 <span id="labelActiveAspect" class="font-mono text-slate-200">9:16</span>
+                            </div>
+                            <div class="flex justify-between text-xs">
+                                <span class="text-slate-400">Theme:</span>
+                                <span id="labelCurrentTheme" class="font-mono text-orange-400 font-bold">Cyber Cyan</span>
                             </div>
                             <div class="flex justify-between text-xs">
                                 <span class="text-slate-400">Voiceover:</span>

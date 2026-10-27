@@ -9,7 +9,9 @@ import os
 import sys
 import subprocess
 from core.template_engine import render_template
-from core.config import ASPECT_RATIOS, THEMES
+from core.config import ASPECT_RATIOS, THEMES, find_node, normalize_env_path
+
+normalize_env_path()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_PATH = os.path.join(BASE_DIR, "templates", "master_thumbnail.html")
@@ -48,7 +50,7 @@ def generate_thumbnail(topic_data, output_path, aspect_ratio="16:9", theme_key="
 
     # Launch node renderer
     cmd = [
-        "node", RENDER_SCRIPT,
+        find_node(), RENDER_SCRIPT,
         "thumbnail",
         temp_html_path,
         output_path,

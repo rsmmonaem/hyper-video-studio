@@ -10,20 +10,14 @@ import sys
 import json
 import subprocess
 from core.template_engine import render_template
-from core.config import ASPECT_RATIOS, THEMES
+from core.config import ASPECT_RATIOS, THEMES, find_node, find_ffmpeg, normalize_env_path
+
+normalize_env_path()
+FFMPEG_BIN = find_ffmpeg()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_PATH = os.path.join(BASE_DIR, "templates", "master_motion.html")
 RENDER_SCRIPT = os.path.join(BASE_DIR, "skills", "hyper-motion-engine", "render_frame_pipeline.js")
-
-def find_ffmpeg():
-    paths = ["/opt/homebrew/bin/ffmpeg", "/usr/local/bin/ffmpeg", "/usr/bin/ffmpeg", "ffmpeg"]
-    for p in paths:
-        if os.path.exists(p) or subprocess.run(["which", p], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0:
-            return p
-    return "ffmpeg"
-
-FFMPEG_BIN = find_ffmpeg()
 
 def render_motion_video(topic_data, audio_meta, output_mp4, aspect_ratio="9:16", theme_key="cyber_cyan", branding=None, fps=24):
     os.makedirs(os.path.dirname(output_mp4), exist_ok=True)
@@ -68,7 +62,7 @@ def render_motion_video(topic_data, audio_meta, output_mp4, aspect_ratio="9:16",
     try:
         # Step 1: Render video frames
         cmd_render = [
-            "node", RENDER_SCRIPT,
+            find_node(), RENDER_SCRIPT,
             "video",
             temp_html_path,
             raw_video_path,

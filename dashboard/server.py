@@ -21,7 +21,8 @@ STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 OUTPUT_BASE_DIR = os.path.join(BASE_DIR, "output")
 LOGS_DIR = os.path.join(BASE_DIR, "logs")
 
-from core.config import load_config, save_config, ASPECT_RATIOS, THEMES
+from core.config import load_config, save_config, ASPECT_RATIOS, THEMES, normalize_env_path
+normalize_env_path()
 from core.cron_manager import get_scheduler_status, install_scheduler, remove_scheduler
 from core.project_manager import (
     list_projects,
@@ -160,7 +161,8 @@ async def run_pipeline_worker(payload):
     proc = await asyncio.create_subprocess_exec(
         *cmd,
         stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.STDOUT
+        stderr=asyncio.subprocess.STDOUT,
+        env=dict(os.environ)
     )
 
     while True:
