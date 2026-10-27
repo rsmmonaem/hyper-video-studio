@@ -27,43 +27,32 @@
 
 <table>
 <tr>
-<th width="42%" align="center">📱 9:16 Vertical Reel & Audio (Playable)</th>
-<th width="58%" align="center">🖼️ 9:16 Developer Card (1080×1920) & Landscape (1200×630)</th>
+<th width="50%" align="center">🎬 Rendered 9:16 Motion Video (Live Playable)</th>
+<th width="50%" align="center">🖼️ Visual 9:16 Thumbnail (1080×1920)</th>
 </tr>
 <tr>
-<td align="center" valign="top">
+<td align="center" valign="middle">
 
-<video src="examples/sample-output/2026-10-27_vertical_reel.mp4" controls="controls" width="100%" style="max-height: 520px; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,212,255,0.25);">
+<video src="examples/sample-output/2026-10-27_vertical_reel.mp4" controls="controls" width="100%" style="max-height: 600px; border-radius: 16px; box-shadow: 0 10px 35px rgba(0,0,0,0.75);">
   <a href="examples/sample-output/2026-10-27_vertical_reel.mp4">▶️ Watch Sample Video (MP4)</a>
 </video>
 
-<br><br>
-
-**🎙️ Studio Bengali Voiceover (Audio):**
-<audio controls style="width: 100%; margin-top: 8px;">
-  <source src="examples/sample-output/2026-10-27_vertical_reel_voice.mp3" type="audio/mpeg">
-  Your browser does not support audio playback.
-</audio>
-
-<br>
-<sub>⚡ <b>Duration:</b> 32.4s • <b>Voice:</b> Native Bengali (bn-IN-BashkarNeural) • <b>Theme:</b> Fire Ember</sub>
-
 </td>
-<td align="center" valign="top">
+<td align="center" valign="middle">
 
 <a href="examples/sample-output/2026-10-27_dev_card_portrait.jpg" target="_blank">
-  <img src="examples/sample-output/2026-10-27_dev_card_portrait.jpg" width="92%" alt="Portrait Developer Card" style="border-radius: 12px; margin-bottom: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);">
-</a>
-
-<br>
-
-<a href="examples/sample-output/2026-10-27_dev_card_landscape.jpg" target="_blank">
-  <img src="examples/sample-output/2026-10-27_dev_card_landscape.jpg" width="92%" alt="Landscape Developer Card" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);">
+  <img src="examples/sample-output/2026-10-27_dev_card_portrait.jpg" width="100%" alt="Visual 9:16 Thumbnail" style="max-height: 600px; object-fit: contain; border-radius: 16px; box-shadow: 0 10px 35px rgba(0,0,0,0.75);">
 </a>
 
 </td>
 </tr>
 </table>
+
+<p align="center">
+  ⚡ <b>Duration:</b> 32.4s &nbsp;•&nbsp; 
+  🎙️ <b>Voiceover Audio:</b> <a href="examples/sample-output/2026-10-27_vertical_reel_voice.mp3">Download / Listen Audio (MP3)</a> &nbsp;•&nbsp; 
+  🎨 <b>Theme:</b> Fire Ember (1080×1920)
+</p>
 
 </div>
 
