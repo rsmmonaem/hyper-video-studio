@@ -17,6 +17,28 @@ import urllib.error
 # High-Retention Architectural & Engineering Blueprints (Zero-Cost Offline Fallback)
 CURATED_BLUEPRINTS = [
     {
+        "category": "Video Editing & Content Creation",
+        "topic": "CapCut vs Adobe Premiere Pro: Video Editing Career Mastery",
+        "hook": "ভিডিও এডিটিং শিখে ক্যারিয়ার গড়তে ক্যাপকাট নাকি প্রিমিয়ার প্রো—কোনটা দিয়ে শুরু করবেন?",
+        "summary": "ক্যাপকাট দিয়ে ফাস্ট মোবাইল ও রিল এডিটিং এবং অ্যাডোবি প্রিমিয়ার প্রো দিয়ে সিনেমাটিক কালার গ্রেডিং ও লং-ফর্ম ভিডিও আর্কিটেকচার।",
+        "core_tech": ["Video Editing", "CapCut", "Premiere Pro", "Color Grading"],
+        "scene_1_hook": "ভিডিও এডিটিং শিখে ক্যারিয়ার গড়তে ক্যাপকাট নাকি প্রিমিয়ার প্রো—কোনটা দিয়ে শুরু করবেন? চলুন সেরা রোডম্যাপ দেখে নেওয়া যাক।",
+        "scene_2_problem": "সঠিক সফটওয়্যার ও প্র্যাকটিসের অভাব থাকলে যেকোনো টুল শিখতে গিয়ে মাসের পর মাস সময় নষ্ট হয় এবং কনফিডেন্স কমে যায়।",
+        "scene_3_solution": "ক্যাপকাট দিয়ে ফাস্ট কাটস ও ট্রেন্ডিং রিলস শিখে পরে প্রিমিয়ার প্রো-তে কি-ফ্রেম ও কালার কারেকশন শিখলে ক্লায়েন্ট ওয়ার্ক সহজ হয়।",
+        "scene_4_outro": "ভিডিও এডিটিং ও কনটেন্ট ক্রিয়েশনের নিয়মিত টিপস ও রিসোর্সের জন্য এখনই সাবস্ক্রাইব করে রাখুন!"
+    },
+    {
+        "category": "Creative Tools & Workflow",
+        "topic": "4K Video Color Grading & Audio Mixdown Optimization",
+        "hook": "সাধারণ ক্যামেরার ফুটেজকেও সিনেমাটিক প্রিমিয়াম লুকে কীভাবে কনভার্ট করবেন?",
+        "summary": "লগ ফুটেজ কনভার্সন, থ্রি-ওয়ে কালার কারেকশন এবং ক্রিস্প স্টুডিও ভয়েস ইকুয়ালাইজেশন।",
+        "core_tech": ["Color Grading", "LUTs", "Audio Mixdown", "DaVinci Resolve"],
+        "scene_1_hook": "সাধারণ মোবাইল বা ক্যামেরার ফুটেজকেও সিনেমাটিক প্রিমিয়াম লুকে কীভাবে কনভার্ট করবেন? চলুন প্র্যাকটিক্যাল টেকনিক জেনে নিই।",
+        "scene_2_problem": "কালার ব্যালেন্স ও সঠিক অডিও নরমালাইজেশন না করলে যেকোনো হাই-কোয়ালিটি ভিডিও অ্যামেচার ও ড্র্যাব দেখায়।",
+        "scene_3_solution": "কনট্রাস্ট কার্ভ ও ব্যাকগ্রাউন্ড নয়েজ সাপ্রেশন ব্যবহার করে প্রফেশনাল সিনেমাটিক লুক ও ক্রিস্প অডিও তৈরি সম্ভব।",
+        "scene_4_outro": "ক্রিয়েটিভ ভিডিও প্রোডাকশন ও মিডিয়া এডিটিংয়ের আরও টেকনিক জানতে চ্যানেলটি সাবস্ক্রাইব করুন!"
+    },
+    {
         "category": "High Concurrency & Load Balancing",
         "topic": "Nginx Reverse Proxy & High-Availability Traffic Distribution",
         "hook": "সার্ভারে হঠাৎ ১০ গুণ ট্রাফিক আসলে সিঙ্গেল সার্ভার ক্র্যাশ না করে কীভাবে লোড ভাগ করবেন?",
@@ -76,73 +98,105 @@ CURATED_BLUEPRINTS = [
 def plan_content(config, user_topic=None, user_hook=None, custom_scenes=None):
     """
     Plans the content pillar and scene scripts using the chosen LLM, custom drafts, or blueprint templates.
+    GUARANTEE: User-provided topic or scenes are 100% sacred and will NEVER be overridden by blueprints.
     """
     llm_cfg = config.get("llm", {})
     provider = llm_cfg.get("provider", "template").lower()
     is_llm_enabled = llm_cfg.get("enabled", False)
-    category = config.get("category", "Software Architecture")
+    proj_name = config.get("name", "Creative Studio")
+    category = config.get("category") or ("Video Editing" if "video" in proj_name.lower() or "edit" in proj_name.lower() else "Software Architecture")
 
-    # If custom scenes are provided
-    if custom_scenes and isinstance(custom_scenes, list) and len(custom_scenes) >= 2:
-        s1 = custom_scenes[0].get("text", "")
-        s2 = custom_scenes[1].get("text", "") if len(custom_scenes) > 1 else ""
-        s3 = custom_scenes[2].get("text", "") if len(custom_scenes) > 2 else ""
-        s4 = custom_scenes[3].get("text", "") if len(custom_scenes) > 3 else ""
-        topic_title = user_topic or config.get("draft", {}).get("topic") or "System Architecture"
-        hook_text = user_hook or config.get("draft", {}).get("hook") or s1[:80]
+    # 1. Check custom scenes (Even if only Scene 1 is provided!)
+    valid_scenes = []
+    if custom_scenes and isinstance(custom_scenes, list):
+        for s in custom_scenes:
+            txt = s.get("text", "").strip() if isinstance(s, dict) else str(s).strip()
+            if txt:
+                valid_scenes.append(txt)
+
+    draft = config.get("draft", {})
+    if not valid_scenes and draft.get("mode") == "script" and draft.get("scene_1", "").strip():
+        valid_scenes = [
+            draft.get("scene_1", "").strip(),
+            draft.get("scene_2", "").strip(),
+            draft.get("scene_3", "").strip(),
+            draft.get("scene_4", "").strip()
+        ]
+        valid_scenes = [s for s in valid_scenes if s]
+
+    if valid_scenes:
+        s1 = valid_scenes[0]
+        hook_text = user_hook or s1
+        
+        # Topic MUST come from user_topic or extracted from s1 / proj_name — NEVER from stale draft topics!
+        if user_topic:
+            topic_title = user_topic
+        elif any(k in s1.lower() for k in ["video", "edit", "capcut", "premiere", "da vinci", "davinci", "footage", "clip", "render"]):
+            topic_title = "Video Editing: CapCut & Adobe Premiere Pro"
+            category = "Video Editing & Content Creation"
+        else:
+            topic_title = proj_name
+        
+        # Build intelligent contextual continuations if user left scenes 2, 3, 4 blank
+        s2 = valid_scenes[1] if len(valid_scenes) > 1 else f"{topic_title} নিয়ে সঠিক রোডম্যাপ ও নিয়মিত প্র্যাকটিস না থাকলে কাজ শেখায় গতি আসে না এবং সময় নষ্ট হয়।"
+        s3 = valid_scenes[2] if len(valid_scenes) > 2 else f"বেসিক থেকে শুরু করে অ্যাডভান্সড স্কিল ধাপে ধাপে আয়ত্ত করে হ্যান্ডস-অন প্রজেক্টের মাধ্যমে পোর্টফোলিও তৈরি করুন।"
+        s4 = valid_scenes[3] if len(valid_scenes) > 3 else f"{topic_title} এবং ক্যারিয়ার ডেভেলপমেন্টের এমন নিয়মিত গাইডলাইন পেতে এখনই সাবস্ক্রাইব করে পাশে থাকুন!"
+
+        # Extract core tech tags
+        core_tech = []
+        for word in ["CapCut", "Premiere", "Photoshop", "AfterEffects", "DaVinci", "Figma", "Python", "Docker", "Kubernetes", "Nginx", "Redis", "Kafka", "PostgreSQL", "React", "Next.js"]:
+            if word.lower() in s1.lower() or word.lower() in topic_title.lower():
+                core_tech.append(word)
+        if not core_tech:
+            core_tech = [w.strip() for w in topic_title.split()[:4] if len(w.strip()) > 2]
+
         return {
             "category": category,
             "topic": topic_title,
-            "hook": hook_text,
-            "summary": f"প্রোডাকশন এনভায়রনমেন্টে {topic_title} সংক্রান্ত প্র্যাকটিক্যাল স্কেলিং আর্কিটেকচার।",
-            "core_tech": [w.strip() for w in topic_title.split()[:4] if len(w.strip()) > 2],
+            "hook": hook_text[:120],
+            "summary": f"{topic_title} নিয়ে প্র্যাকটিক্যাল গাইডলাইন ও ক্যারিয়ার ডেভেলপমেন্ট রোডম্যাপ।",
+            "core_tech": core_tech or ["Production", "Tutorial", "Skills"],
             "scene_1_hook": s1,
             "scene_2_problem": s2,
             "scene_3_solution": s3,
             "scene_4_outro": s4
         }
 
-    # If user provided topic
-    if user_topic:
-        hook_text = user_hook or f"প্রোডাকশন স্কেলে {user_topic} নিয়ে মারাত্মক ভুল কীভাবে এড়াবেন?"
+    # 2. Check if user provided custom topic directly
+    if user_topic or (draft.get("mode") == "custom" and draft.get("topic")):
+        topic_title = user_topic or draft.get("topic")
+        hook_text = user_hook or draft.get("hook") or f"{topic_title} নিয়ে সঠিক গাইডলাইন ও মারাত্মক ভুলগুলো কীভাবে এড়াবেন?"
         return {
             "category": category,
-            "topic": user_topic,
+            "topic": topic_title,
             "hook": hook_text,
-            "summary": f"প্রোডাকশন এনভায়রনমেন্টে {user_topic} সংক্রান্ত প্র্যাকটিক্যাল স্কেলিং আর্কিটেকচার।",
-            "core_tech": [w.strip() for w in user_topic.split()[:4] if len(w.strip()) > 2],
-            "scene_1_hook": f"{hook_text} চলুন প্রোডাকশন আর্কিটেকচার দেখে নেওয়া যাক।",
-            "scene_2_problem": f"{user_topic} সঠিকভাবে কনফিগার না করলে পিক ট্রাফিকে সিস্টেমের পারফরম্যান্স মারাত্মকভাবে ব্যাহত হয়।",
-            "scene_3_solution": f"প্র্যাকটিক্যাল আর্কিটেকচার ও লোড ডিস্ট্রিবিউশন ফলো করলে ট্রাফিকের স্পাইক থাকা সত্ত্বেও সিস্টেম স্মুথলি স্কেল করে।",
-            "scene_4_outro": "সফটওয়্যার ইঞ্জিনিয়ারিং ও সিস্টেম ডিজাইনের এমন প্রোডাকশন সমাধান পেতে এখনই সাবস্ক্রাইব করুন!"
+            "summary": f"{topic_title} সংক্রান্ত প্র্যাকটিক্যাল গাইডলাইন ও রোডম্যাপ।",
+            "core_tech": [w.strip() for w in topic_title.split()[:4] if len(w.strip()) > 2],
+            "scene_1_hook": f"{hook_text} চলুন বিস্তারিত দেখে নেওয়া যাক।",
+            "scene_2_problem": f"{topic_title} সঠিকভাবে প্র্যাকটিস না করলে এবং ক্লিয়ার কনসেপ্ট ছাড়া কাজ করতে গেলে দীর্ঘমেয়াদে সময় নষ্ট হয়।",
+            "scene_3_solution": f"প্র্যাকটিক্যাল গাইডলাইন ও বেস্ট প্র্যাকটিস ফলো করলে অল্প সময়েই কনফিডেন্সের সাথে এক্সপার্ট হওয়া সম্ভব।",
+            "scene_4_outro": f"{topic_title} সংক্রান্ত নিয়মিত ইনসাইট ও ভিডিও পেতে এখনই সাবস্ক্রাইব করে পাশে থাকুন!"
         }
 
-    # Check project draft memory
-    draft = config.get("draft", {})
-    if draft.get("mode") == "custom" and draft.get("topic"):
-        d_topic = draft["topic"]
-        d_hook = draft.get("hook") or f"প্রোডাকশন স্কেলে {d_topic} নিয়ে ভুল কীভাবে এড়াবেন?"
-        return {
-            "category": category,
-            "topic": d_topic,
-            "hook": d_hook,
-            "summary": f"প্রোডাকশন এনভায়রনমেন্টে {d_topic} সংক্রান্ত প্র্যাকটিক্যাল স্কেলিং আর্কিটেকচার।",
-            "core_tech": [w.strip() for w in d_topic.split()[:4] if len(w.strip()) > 2],
-            "scene_1_hook": f"{d_hook} চলুন বিস্তারিত দেখে নেওয়া যাক।",
-            "scene_2_problem": f"{d_topic} ছাড়া পিক ট্রাফিকে সিস্টেমের পারফরম্যান্স মারাত্মকভাবে ব্যাহত হয়।",
-            "scene_3_solution": f"সঠিক আর্কিটেকচার ফলো করলে ট্রাফিকের চরম চাপেও সিস্টেম স্মুথ থাকে।",
-            "scene_4_outro": "এমন আরও ইঞ্জিনিয়ারিং ভিডিও পেতে এখনই সাবস্ক্রাইব করে রাখুন!"
-        }
-
-    # If external LLM is explicitly enabled with API key
+    # 3. If external LLM is explicitly enabled with API key
     if is_llm_enabled and provider in ["gemini", "openai", "openrouter", "custom"] and llm_cfg.get("api_key"):
         try:
             return call_external_llm(llm_cfg)
         except Exception as e:
-            print(f"⚠️ LLM API failed ({e}), falling back gracefully to curated blueprint.")
+            print(f"⚠️ LLM API failed ({e}), falling back gracefully to niche blueprint.")
 
-    # Default / Deterministic Blueprint matching category or random
-    matching = [b for b in CURATED_BLUEPRINTS if category.lower() in b.get("category", "").lower()]
+    # 4. Deterministic Blueprint matching project niche (Video Editing vs DevOps vs AI)
+    proj_lower = f"{proj_name} {category}".lower()
+    matching = []
+    for b in CURATED_BLUEPRINTS:
+        b_cat = f"{b.get('category', '')} {b.get('topic', '')}".lower()
+        if any(term in proj_lower for term in ["video", "edit", "capcut", "premiere", "creative"]) and any(term in b_cat for term in ["video", "editing", "creative"]):
+            matching.append(b)
+        elif any(term in proj_lower for term in ["cloud", "devops", "docker", "server", "linux"]) and any(term in b_cat for term in ["devops", "load balancing", "server", "docker"]):
+            matching.append(b)
+        elif any(term in proj_lower for term in ["ai", "microservices", "kafka"]) and any(term in b_cat for term in ["microservices", "event", "kafka"]):
+            matching.append(b)
+
     if matching:
         blueprint = random.choice(matching)
     else:

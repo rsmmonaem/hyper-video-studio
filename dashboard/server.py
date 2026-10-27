@@ -143,22 +143,20 @@ async def status_handler(request):
 async def run_pipeline_worker(payload):
     global running_task
     current_job_logs.clear()
-    cmd = [sys.executable, "-u", os.path.join(BASE_DIR, "cli.py"), "run-pipeline"]
     
-    if payload.get("project_id"):
-        cmd.extend(["--project", payload["project_id"]])
-    if payload.get("action"):
-        cmd.extend(["--action", payload["action"]])
-    if payload.get("topic"):
-        cmd.extend(["--topic", payload["topic"]])
-    if payload.get("hook"):
-        cmd.extend(["--hook", payload["hook"]])
-    if payload.get("aspect_ratio"):
-        cmd.extend(["--aspect", payload["aspect_ratio"]])
-    if payload.get("theme"):
-        cmd.extend(["--theme", payload["theme"]])
+    pid = payload.get("project_id", "default")
+    p_dir = get_project_dir(pid) if pid else BASE_DIR
+    os.makedirs(p_dir, exist_ok=True)
+    payload_file = os.path.join(p_dir, "run_payload.json")
+    try:
+        with open(payload_file, "w", encoding="utf-8") as pf:
+            json.dump(payload, pf, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"Error saving run payload: {e}")
 
-    broadcast_log(f"🚀 Initializing Video Pipeline Engine: {' '.join(cmd)}\n")
+    cmd = [sys.executable, "-u", os.path.join(BASE_DIR, "cli.py"), "run-pipeline", "--payload-file", payload_file]
+
+    broadcast_log(f"🚀 Initializing Video Pipeline Engine with full payload: {payload.get('action', 'full').upper()}\n")
 
     proc = await asyncio.create_subprocess_exec(
         *cmd,
@@ -196,7 +194,16 @@ async def trigger_run_handler(request):
             updates["aspect_ratio"] = data["aspect_ratio"]
         if data.get("theme"):
             updates["theme"] = data["theme"]
-        if data.get("topic") or data.get("hook"):
+        if data.get("scenes"):
+            sc = data["scenes"]
+            updates["draft"] = {
+                "mode": "script",
+                "scene_1": sc[0].get("text", "") if len(sc) > 0 else "",
+                "scene_2": sc[1].get("text", "") if len(sc) > 1 else "",
+                "scene_3": sc[2].get("text", "") if len(sc) > 2 else "",
+                "scene_4": sc[3].get("text", "") if len(sc) > 3 else ""
+            }
+        elif data.get("topic") or data.get("hook"):
             updates["draft"] = {
                 "mode": "custom",
                 "topic": data.get("topic", ""),

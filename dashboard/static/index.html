@@ -394,6 +394,32 @@
                             </div>
                         </div>
 
+                        <!-- Target Duration Control -->
+                        <div class="space-y-3 pt-3 border-t border-white/5">
+                            <div class="flex justify-between items-center">
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400">Target Video Duration</label>
+                                <span id="labelCurrentDuration" class="text-[11px] text-cyan-400 font-mono">30s (Default)</span>
+                            </div>
+                            <div class="grid grid-cols-4 gap-2.5">
+                                <button type="button" class="duration-card p-2.5 rounded-xl border border-white/5 bg-slate-900/40 text-center hover:border-cyan-400 transition-all cursor-pointer" data-duration="15" onclick="selectDuration(15, this)">
+                                    <div class="text-xs font-bold text-slate-200">15s</div>
+                                    <div class="text-[10px] text-slate-400">Quick Reel</div>
+                                </button>
+                                <button type="button" class="duration-card p-2.5 rounded-xl border border-cyan-400 bg-cyan-950/40 text-center transition-all selected cursor-pointer" data-duration="30" onclick="selectDuration(30, this)">
+                                    <div class="text-xs font-bold text-cyan-300">30s</div>
+                                    <div class="text-[10px] text-slate-400">Standard Short</div>
+                                </button>
+                                <button type="button" class="duration-card p-2.5 rounded-xl border border-white/5 bg-slate-900/40 text-center hover:border-cyan-400 transition-all cursor-pointer" data-duration="45" onclick="selectDuration(45, this)">
+                                    <div class="text-xs font-bold text-slate-200">45s</div>
+                                    <div class="text-[10px] text-slate-400">Story Reel</div>
+                                </button>
+                                <button type="button" class="duration-card p-2.5 rounded-xl border border-white/5 bg-slate-900/40 text-center hover:border-cyan-400 transition-all cursor-pointer" data-duration="60" onclick="selectDuration(60, this)">
+                                    <div class="text-xs font-bold text-slate-200">60s</div>
+                                    <div class="text-[10px] text-slate-400">Deep Dive</div>
+                                </button>
+                            </div>
+                        </div>
+
                         <!-- Aesthetic Visual Themes -->
                         <div class="space-y-3 pt-3 border-t border-white/5">
                             <div class="flex justify-between items-center">

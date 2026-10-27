@@ -2,7 +2,7 @@
   "id": "video-editor",
   "name": "Video Editor",
   "description": "Autonomous developer video project",
-  "category": "Software Architecture",
+  "category": "Video Editing & Production",
   "aspect_ratio": "1:1",
   "theme": "clean_minimal",
   "language": "bn",
@@ -10,12 +10,13 @@
   "created_at": "2026-10-28 02:06:18",
   "branding": {
     "author": "Rsm Monaem",
-    "brand_name": "FTLTD",
-    "brand_tagline": "Future TECH Limited",
+    "brand_name": "Video Editor Pro",
+    "handle": "@videoeditor",
+    "brand_tagline": "Video Editing & Production",
     "cta_text": "ফলো ও সাবস্ক্রাইব করুন"
   },
   "cron": {
-    "enabled": true,
+    "enabled": false,
     "hour": 10,
     "minute": 30
   },
@@ -31,5 +32,15 @@
     "elevenlabs_voice_id": "j5PhP1QJv2DvlhRv3mEv",
     "openai_api_key": "",
     "enable_sfx": true
-  }
+  },
+  "draft": {
+    "mode": "script",
+    "topic": "Video Editing: CapCut & Adobe Premiere Pro",
+    "hook": "ভিডিও এডিটিং শিখে নিজের ক্যারিয়ার গড়ুন! 🎬 CapCut ও Adobe Premiere Pro দিয়ে শুরু করুন, প্রতিদিন প্র্যাকটিস করুন, পোর্টফোলিও তৈরি করুন",
+    "scene_1": "ভিডিও এডিটিং শিখে নিজের ক্যারিয়ার গড়ুন! 🎬 CapCut ও Adobe Premiere Pro দিয়ে শুরু করুন, প্রতিদিন প্র্যাকটিস করুন, পোর্টফোলিও তৈরি করুন",
+    "scene_2": "",
+    "scene_3": "",
+    "scene_4": ""
+  },
+  "updated_at": "2026-10-28 02:30:58"
 }

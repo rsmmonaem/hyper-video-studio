@@ -533,6 +533,27 @@ function selectTheme(theme, el, persist = true) {
     }
 }
 
+let activeDuration = 30;
+
+function selectDuration(dur, el) {
+    activeDuration = dur;
+    document.querySelectorAll(".duration-card").forEach(c => {
+        c.classList.remove("selected", "border-cyan-400", "bg-cyan-950/40");
+        c.classList.add("border-white/5", "bg-slate-900/40");
+        const title = c.querySelector("div");
+        if (title) title.className = "text-xs font-bold text-slate-200";
+    });
+    const target = el || document.querySelector(`.duration-card[data-duration="${dur}"]`);
+    if (target) {
+        target.classList.remove("border-white/5", "bg-slate-900/40");
+        target.classList.add("selected", "border-cyan-400", "bg-cyan-950/40");
+        const title = target.querySelector("div");
+        if (title) title.className = "text-xs font-bold text-cyan-300";
+    }
+    const label = document.getElementById("labelCurrentDuration");
+    if (label) label.textContent = `${dur}s (${dur === 15 ? 'Quick Reel' : dur === 30 ? 'Standard Short' : dur === 45 ? 'Story Reel' : 'Deep Breakdown'})`;
+}
+
 // ==========================================
 // MODULAR RUN EXECUTOR (4 DISTINCT MODES)
 // ==========================================
@@ -545,19 +566,28 @@ async function triggerModularRun(action = "full") {
         project_id: currentProjectId,
         action: action,
         aspect_ratio: activeAspect,
-        theme: activeTheme
+        theme: activeTheme,
+        duration: activeDuration
     };
 
     if (creationMode === "custom") {
         payload.topic = document.getElementById("customTopicInput").value.trim();
         payload.hook = document.getElementById("customHookInput").value.trim();
     } else if (creationMode === "script") {
+        const s1 = document.getElementById("scene1Input").value.trim();
+        const s2 = document.getElementById("scene2Input").value.trim();
+        const s3 = document.getElementById("scene3Input").value.trim();
+        const s4 = document.getElementById("scene4Input").value.trim();
         payload.scenes = [
-            { id: "scene_1", text: document.getElementById("scene1Input").value.trim() },
-            { id: "scene_2", text: document.getElementById("scene2Input").value.trim() },
-            { id: "scene_3", text: document.getElementById("scene3Input").value.trim() },
-            { id: "scene_4", text: document.getElementById("scene4Input").value.trim() }
+            { id: "scene_1", text: s1 },
+            { id: "scene_2", text: s2 },
+            { id: "scene_3", text: s3 },
+            { id: "scene_4", text: s4 }
         ];
+        if (s1) {
+            payload.hook = s1;
+            payload.topic = currentProjectData?.name || "Video Editor";
+        }
     }
 
     try {

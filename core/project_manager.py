@@ -169,15 +169,21 @@ def list_projects():
                     subdirs = sorted([d for d in os.listdir(out_dir) if os.path.isdir(os.path.join(out_dir, d))], reverse=True)
                     count = len(subdirs)
                     if subdirs:
-                        man_file = os.path.join(out_dir, subdirs[0], "manifest.json")
+                        top_d = subdirs[0]
+                        top_path = os.path.join(out_dir, top_d)
+                        man_file = os.path.join(top_path, "manifest.json")
                         if os.path.exists(man_file):
                             try:
                                 with open(man_file, "r", encoding="utf-8") as mf:
                                     m_data = json.load(mf)
-                                    latest_thumb = f"/api/projects/{pid}/media/{subdirs[0]}/thumbnail_16_9.jpg"
+                                    latest_thumb = f"/api/projects/{pid}/media/{top_d}/thumbnail_16_9.jpg"
                                     latest_video = m_data.get("video")
                             except Exception:
                                 pass
+                        else:
+                            # Fallback check
+                            if os.path.exists(os.path.join(top_path, "thumbnail_16_9.jpg")):
+                                latest_thumb = f"/api/projects/{pid}/media/{top_d}/thumbnail_16_9.jpg"
                 
                 data["video_count"] = count
                 data["latest_thumbnail"] = latest_thumb
@@ -199,7 +205,10 @@ def get_project(project_id):
         jobs = []
         if os.path.exists(out_dir):
             for d in sorted(os.listdir(out_dir), reverse=True):
-                man_path = os.path.join(out_dir, d, "manifest.json")
+                d_path = os.path.join(out_dir, d)
+                if not os.path.isdir(d_path):
+                    continue
+                man_path = os.path.join(d_path, "manifest.json")
                 if os.path.exists(man_path):
                     try:
                         with open(man_path, "r", encoding="utf-8") as mf:
@@ -208,6 +217,39 @@ def get_project(project_id):
                             jobs.append(m_data)
                     except Exception:
                         pass
+                else:
+                    # Resilient fallback: scan for produced media even if manifest was interrupted
+                    files = os.listdir(d_path)
+                    v_files = [f for f in files if f.endswith(".mp4")]
+                    vid_final = next((f for f in v_files if not f.endswith("_raw.mp4")), None) or (v_files[0] if v_files else None)
+                    t_16 = "thumbnail_16_9.jpg" if "thumbnail_16_9.jpg" in files else None
+                    t_9 = "thumbnail_9_16.jpg" if "thumbnail_9_16.jpg" in files else None
+                    aud = "master_audio.mp3" if "master_audio.mp3" in files else None
+
+                    if vid_final or t_16 or t_9 or aud:
+                        m_data = {
+                            "folder_name": d,
+                            "created_at": d.split("_")[0] if "_" in d else "Recent",
+                            "topic": {
+                                "topic": data.get("name", "Video Production"),
+                                "hook": data.get("draft", {}).get("hook") or "Project Media Output",
+                                "category": data.get("category", "Production")
+                            },
+                            "video": os.path.join(d_path, vid_final) if vid_final else None,
+                            "thumbnails": {
+                                "16_9": os.path.join(d_path, t_16) if t_16 else None,
+                                "9_16": os.path.join(d_path, t_9) if t_9 else None
+                            },
+                            "audio": {
+                                "path": os.path.join(d_path, aud) if aud else None
+                            }
+                        }
+                        try:
+                            with open(man_path, "w", encoding="utf-8") as mf:
+                                json.dump(m_data, mf, indent=2, ensure_ascii=False)
+                        except Exception:
+                            pass
+                        jobs.append(m_data)
         data["jobs"] = jobs
         return data
     return None

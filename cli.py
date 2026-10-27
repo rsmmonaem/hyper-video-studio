@@ -7,7 +7,9 @@ Usage:
   ./cli.py scheduler [--status] [--install --hour 10 --minute 30] [--remove]
 """
 
+import os
 import sys
+import json
 import argparse
 from core.config import normalize_env_path
 normalize_env_path()
@@ -27,6 +29,7 @@ def main():
     p_run.add_argument("--aspect", default=None, help="Aspect ratio (9:16, 16:9, 1:1, etc.)")
     p_run.add_argument("--theme", default=None, help="Theme key")
     p_run.add_argument("--action", default="full", choices=["full", "thumbnail", "audio", "video"], help="Modular run action")
+    p_run.add_argument("--payload-file", help="Path to JSON run payload file")
 
     # Dashboard
     p_dash = subparsers.add_parser("dashboard", help="Start web dashboard server")
@@ -44,17 +47,41 @@ def main():
     args = parser.parse_args()
 
     if args.command == "run-pipeline":
+        project_id = args.project
+        topic = args.topic
+        hook = args.hook
+        aspect = args.aspect
+        theme = args.theme
+        action = args.action
+        custom_scenes = None
+
+        if args.payload_file and os.path.exists(args.payload_file):
+            try:
+                import json
+                with open(args.payload_file, "r", encoding="utf-8") as pf:
+                    pdata = json.load(pf)
+                    project_id = pdata.get("project_id") or project_id
+                    topic = pdata.get("topic") or topic
+                    hook = pdata.get("hook") or hook
+                    aspect = pdata.get("aspect_ratio") or aspect
+                    theme = pdata.get("theme") or theme
+                    action = pdata.get("action") or action
+                    custom_scenes = pdata.get("scenes") or custom_scenes
+            except Exception as pe:
+                print(f"⚠️ Error reading payload file: {pe}")
+
         manifest = run_pipeline(
-            project_id=args.project,
-            user_topic=args.topic,
-            user_hook=args.hook,
-            aspect_ratio=args.aspect,
-            theme=args.theme,
-            action=args.action
+            project_id=project_id,
+            user_topic=topic,
+            user_hook=hook,
+            custom_scenes=custom_scenes,
+            aspect_ratio=aspect,
+            theme=theme,
+            action=action
         )
-        if args.action == "thumbnail":
+        if action == "thumbnail":
             print(f"\n🎨 Finished! Output thumbnails: {manifest['thumbnails']}")
-        elif args.action == "audio":
+        elif action == "audio":
             print(f"\n🎙️ Finished! Master audio: {manifest['audio']['path']}")
         else:
             print(f"\n🎉 Finished! Output video: {manifest['video']}")

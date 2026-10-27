@@ -95,16 +95,29 @@ def run_pipeline(user_topic=None, user_hook=None, custom_scenes=None, aspect_rat
     elapsed_1 = time.time() - t0
     print(f"STEP_DONE: 1 | {elapsed_1:.1f}s")
 
-    # If custom scenes are provided
-    if custom_scenes and isinstance(custom_scenes, list) and len(custom_scenes) >= 2:
-        scenes = custom_scenes
-    else:
-        scenes = [
-            {"id": "scene_1", "text": topic_data["scene_1_hook"]},
-            {"id": "scene_2", "text": topic_data["scene_2_problem"]},
-            {"id": "scene_3", "text": topic_data["scene_3_solution"]},
-            {"id": "scene_4", "text": topic_data["scene_4_outro"]}
-        ]
+    scenes = [
+        {"id": "scene_1", "text": topic_data["scene_1_hook"]},
+        {"id": "scene_2", "text": topic_data["scene_2_problem"]},
+        {"id": "scene_3", "text": topic_data["scene_3_solution"]},
+        {"id": "scene_4", "text": topic_data["scene_4_outro"]}
+    ]
+
+    # Initialize Manifest on disk immediately
+    manifest = {
+        "created_at": now.strftime("%Y-%m-%d %H:%M:%S"),
+        "project_id": project_id,
+        "action": action,
+        "aspect_ratio": selected_aspect,
+        "theme": selected_theme,
+        "topic": topic_data,
+        "audio": {},
+        "thumbnails": {},
+        "video": None,
+        "copies": {}
+    }
+    manifest_path = os.path.join(job_dir, "manifest.json")
+    with open(manifest_path, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, indent=2, ensure_ascii=False)
 
     # ==========================================
     # MODULAR BRANCH: THUMBNAILS ONLY
@@ -120,19 +133,10 @@ def run_pipeline(user_topic=None, user_hook=None, custom_scenes=None, aspect_rat
         elapsed_3 = time.time() - t0
         print(f"STEP_DONE: 3 | {elapsed_3:.1f}s")
 
-        manifest = {
-            "created_at": now.strftime("%Y-%m-%d %H:%M:%S"),
-            "project_id": project_id,
-            "action": "thumbnail",
-            "aspect_ratio": selected_aspect,
-            "theme": selected_theme,
-            "topic": topic_data,
-            "thumbnails": {
-                "16_9": thumb_16_9,
-                "9_16": thumb_9_16
-            }
+        manifest["thumbnails"] = {
+            "16_9": thumb_16_9,
+            "9_16": thumb_9_16
         }
-        manifest_path = os.path.join(job_dir, "manifest.json")
         with open(manifest_path, "w", encoding="utf-8") as f:
             json.dump(manifest, f, indent=2, ensure_ascii=False)
         print(f"PIPELINE_COMPLETE: {manifest_path}")
@@ -150,26 +154,18 @@ def run_pipeline(user_topic=None, user_hook=None, custom_scenes=None, aspect_rat
     print(f"✅ Master audio ready ({audio_meta['duration']:.1f}s): {audio_meta['audio_path']}")
     print(f"STEP_DONE: 2 | {elapsed_2:.1f}s")
 
+    manifest["audio"] = {
+        "duration": audio_meta["duration"],
+        "cues": audio_meta["cues"],
+        "path": audio_meta["audio_path"]
+    }
+    with open(manifest_path, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, indent=2, ensure_ascii=False)
+
     # ==========================================
     # MODULAR BRANCH: AUDIO ONLY
     # ==========================================
     if action == "audio":
-        manifest = {
-            "created_at": now.strftime("%Y-%m-%d %H:%M:%S"),
-            "project_id": project_id,
-            "action": "audio",
-            "aspect_ratio": selected_aspect,
-            "theme": selected_theme,
-            "topic": topic_data,
-            "audio": {
-                "duration": audio_meta["duration"],
-                "cues": audio_meta["cues"],
-                "path": audio_meta["audio_path"]
-            }
-        }
-        manifest_path = os.path.join(job_dir, "manifest.json")
-        with open(manifest_path, "w", encoding="utf-8") as f:
-            json.dump(manifest, f, indent=2, ensure_ascii=False)
         print(f"PIPELINE_COMPLETE: {manifest_path}")
         print(f"✨ Audio Synthesis Complete in: {job_dir}")
         return manifest
@@ -187,6 +183,13 @@ def run_pipeline(user_topic=None, user_hook=None, custom_scenes=None, aspect_rat
     generate_thumbnail(topic_data, thumb_9_16, aspect_ratio="9:16", theme_key=selected_theme, branding=branding)
     elapsed_3 = time.time() - t0
     print(f"STEP_DONE: 3 | {elapsed_3:.1f}s")
+
+    manifest["thumbnails"] = {
+        "16_9": thumb_16_9,
+        "9_16": thumb_9_16
+    }
+    with open(manifest_path, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, indent=2, ensure_ascii=False)
 
     # ==========================================
     # Step 4: Motion Video Compilation
@@ -207,6 +210,10 @@ def run_pipeline(user_topic=None, user_hook=None, custom_scenes=None, aspect_rat
     elapsed_4 = time.time() - t0
     print(f"STEP_DONE: 4 | {elapsed_4:.1f}s")
 
+    manifest["video"] = final_video_path
+    with open(manifest_path, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, indent=2, ensure_ascii=False)
+
     # ==========================================
     # Step 5: Multi-Platform Post Formatting & Manifest
     # ==========================================
@@ -218,27 +225,7 @@ def run_pipeline(user_topic=None, user_hook=None, custom_scenes=None, aspect_rat
     with open(copies_file, "w", encoding="utf-8") as f:
         json.dump(copies, f, indent=2, ensure_ascii=False)
 
-    manifest = {
-        "created_at": now.strftime("%Y-%m-%d %H:%M:%S"),
-        "project_id": project_id,
-        "action": action,
-        "aspect_ratio": selected_aspect,
-        "theme": selected_theme,
-        "topic": topic_data,
-        "audio": {
-            "duration": audio_meta["duration"],
-            "cues": audio_meta["cues"],
-            "path": audio_meta["audio_path"]
-        },
-        "thumbnails": {
-            "16_9": thumb_16_9,
-            "9_16": thumb_9_16
-        },
-        "video": final_video_path,
-        "copies": copies
-    }
-
-    manifest_path = os.path.join(job_dir, "manifest.json")
+    manifest["copies"] = copies
     with open(manifest_path, "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)
     elapsed_5 = time.time() - t0
