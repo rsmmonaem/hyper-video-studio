@@ -147,6 +147,8 @@ async def run_pipeline_worker(payload):
     
     if payload.get("project_id"):
         cmd.extend(["--project", payload["project_id"]])
+    if payload.get("action"):
+        cmd.extend(["--action", payload["action"]])
     if payload.get("topic"):
         cmd.extend(["--topic", payload["topic"]])
     if payload.get("hook"):
@@ -185,6 +187,23 @@ async def trigger_run_handler(request):
         data = await request.json()
     except Exception:
         data = {}
+
+    # Auto-persist selected aspect, theme and draft in project if scoped
+    pid = data.get("project_id")
+    if pid:
+        updates = {}
+        if data.get("aspect_ratio"):
+            updates["aspect_ratio"] = data["aspect_ratio"]
+        if data.get("theme"):
+            updates["theme"] = data["theme"]
+        if data.get("topic") or data.get("hook"):
+            updates["draft"] = {
+                "mode": "custom",
+                "topic": data.get("topic", ""),
+                "hook": data.get("hook", "")
+            }
+        if updates:
+            update_project(pid, updates)
 
     running_task = asyncio.create_task(run_pipeline_worker(data))
     return web.json_response({"status": "started"})

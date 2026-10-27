@@ -73,35 +73,80 @@ CURATED_BLUEPRINTS = [
     }
 ]
 
-def plan_content(config, user_topic=None, user_hook=None):
+def plan_content(config, user_topic=None, user_hook=None, custom_scenes=None):
     """
-    Plans the content pillar and scene scripts using the chosen LLM or blueprint templates.
+    Plans the content pillar and scene scripts using the chosen LLM, custom drafts, or blueprint templates.
     """
     llm_cfg = config.get("llm", {})
     provider = llm_cfg.get("provider", "template").lower()
+    is_llm_enabled = llm_cfg.get("enabled", False)
+    category = config.get("category", "Software Architecture")
 
-    if user_topic and user_hook:
+    # If custom scenes are provided
+    if custom_scenes and isinstance(custom_scenes, list) and len(custom_scenes) >= 2:
+        s1 = custom_scenes[0].get("text", "")
+        s2 = custom_scenes[1].get("text", "") if len(custom_scenes) > 1 else ""
+        s3 = custom_scenes[2].get("text", "") if len(custom_scenes) > 2 else ""
+        s4 = custom_scenes[3].get("text", "") if len(custom_scenes) > 3 else ""
+        topic_title = user_topic or config.get("draft", {}).get("topic") or "System Architecture"
+        hook_text = user_hook or config.get("draft", {}).get("hook") or s1[:80]
         return {
-            "category": "Software Architecture",
+            "category": category,
+            "topic": topic_title,
+            "hook": hook_text,
+            "summary": f"প্রোডাকশন এনভায়রনমেন্টে {topic_title} সংক্রান্ত প্র্যাকটিক্যাল স্কেলিং আর্কিটেকচার।",
+            "core_tech": [w.strip() for w in topic_title.split()[:4] if len(w.strip()) > 2],
+            "scene_1_hook": s1,
+            "scene_2_problem": s2,
+            "scene_3_solution": s3,
+            "scene_4_outro": s4
+        }
+
+    # If user provided topic
+    if user_topic:
+        hook_text = user_hook or f"প্রোডাকশন স্কেলে {user_topic} নিয়ে মারাত্মক ভুল কীভাবে এড়াবেন?"
+        return {
+            "category": category,
             "topic": user_topic,
-            "hook": user_hook,
+            "hook": hook_text,
             "summary": f"প্রোডাকশন এনভায়রনমেন্টে {user_topic} সংক্রান্ত প্র্যাকটিক্যাল স্কেলিং আর্কিটেকচার।",
             "core_tech": [w.strip() for w in user_topic.split()[:4] if len(w.strip()) > 2],
-            "scene_1_hook": f"{user_hook} চলুন বিস্তারিত দেখে নেওয়া যাক।",
+            "scene_1_hook": f"{hook_text} চলুন প্রোডাকশন আর্কিটেকচার দেখে নেওয়া যাক।",
             "scene_2_problem": f"{user_topic} সঠিকভাবে কনফিগার না করলে পিক ট্রাফিকে সিস্টেমের পারফরম্যান্স মারাত্মকভাবে ব্যাহত হয়।",
-            "scene_3_solution": f"প্র্যাকটিক্যাল আর্কিটেকচার ও বেস্ট প্র্যাকটিস ফলো করলে ট্রাফিকের স্পাইক থাকা সত্ত্বেও সিস্টেম স্মুথলি স্কেল করে।",
+            "scene_3_solution": f"প্র্যাকটিক্যাল আর্কিটেকচার ও লোড ডিস্ট্রিবিউশন ফলো করলে ট্রাফিকের স্পাইক থাকা সত্ত্বেও সিস্টেম স্মুথলি স্কেল করে।",
             "scene_4_outro": "সফটওয়্যার ইঞ্জিনিয়ারিং ও সিস্টেম ডিজাইনের এমন প্রোডাকশন সমাধান পেতে এখনই সাবস্ক্রাইব করুন!"
         }
 
-    # If external LLM is configured and not 'template'
-    if provider in ["gemini", "openai", "openrouter", "custom"] and llm_cfg.get("api_key"):
+    # Check project draft memory
+    draft = config.get("draft", {})
+    if draft.get("mode") == "custom" and draft.get("topic"):
+        d_topic = draft["topic"]
+        d_hook = draft.get("hook") or f"প্রোডাকশন স্কেলে {d_topic} নিয়ে ভুল কীভাবে এড়াবেন?"
+        return {
+            "category": category,
+            "topic": d_topic,
+            "hook": d_hook,
+            "summary": f"প্রোডাকশন এনভায়রনমেন্টে {d_topic} সংক্রান্ত প্র্যাকটিক্যাল স্কেলিং আর্কিটেকচার।",
+            "core_tech": [w.strip() for w in d_topic.split()[:4] if len(w.strip()) > 2],
+            "scene_1_hook": f"{d_hook} চলুন বিস্তারিত দেখে নেওয়া যাক।",
+            "scene_2_problem": f"{d_topic} ছাড়া পিক ট্রাফিকে সিস্টেমের পারফরম্যান্স মারাত্মকভাবে ব্যাহত হয়।",
+            "scene_3_solution": f"সঠিক আর্কিটেকচার ফলো করলে ট্রাফিকের চরম চাপেও সিস্টেম স্মুথ থাকে।",
+            "scene_4_outro": "এমন আরও ইঞ্জিনিয়ারিং ভিডিও পেতে এখনই সাবস্ক্রাইব করে রাখুন!"
+        }
+
+    # If external LLM is explicitly enabled with API key
+    if is_llm_enabled and provider in ["gemini", "openai", "openrouter", "custom"] and llm_cfg.get("api_key"):
         try:
             return call_external_llm(llm_cfg)
         except Exception as e:
             print(f"⚠️ LLM API failed ({e}), falling back gracefully to curated blueprint.")
 
-    # Default / Template Blueprint
-    blueprint = random.choice(CURATED_BLUEPRINTS)
+    # Default / Deterministic Blueprint matching category or random
+    matching = [b for b in CURATED_BLUEPRINTS if category.lower() in b.get("category", "").lower()]
+    if matching:
+        blueprint = random.choice(matching)
+    else:
+        blueprint = random.choice(CURATED_BLUEPRINTS)
     return dict(blueprint)
 
 def call_external_llm(llm_cfg):

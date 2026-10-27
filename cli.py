@@ -26,6 +26,7 @@ def main():
     p_run.add_argument("--hook", help="Custom viral hook")
     p_run.add_argument("--aspect", default=None, help="Aspect ratio (9:16, 16:9, 1:1, etc.)")
     p_run.add_argument("--theme", default=None, help="Theme key")
+    p_run.add_argument("--action", default="full", choices=["full", "thumbnail", "audio", "video"], help="Modular run action")
 
     # Dashboard
     p_dash = subparsers.add_parser("dashboard", help="Start web dashboard server")
@@ -48,9 +49,15 @@ def main():
             user_topic=args.topic,
             user_hook=args.hook,
             aspect_ratio=args.aspect,
-            theme=args.theme
+            theme=args.theme,
+            action=args.action
         )
-        print(f"\n🎉 Finished! Output video: {manifest['video']}")
+        if args.action == "thumbnail":
+            print(f"\n🎨 Finished! Output thumbnails: {manifest['thumbnails']}")
+        elif args.action == "audio":
+            print(f"\n🎙️ Finished! Master audio: {manifest['audio']['path']}")
+        else:
+            print(f"\n🎉 Finished! Output video: {manifest['video']}")
 
     elif args.command == "dashboard":
         from dashboard.server import start_server

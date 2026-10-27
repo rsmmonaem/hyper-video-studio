@@ -1,0 +1,35 @@
+{
+  "id": "video-editor",
+  "name": "Video Editor",
+  "description": "Autonomous developer video project",
+  "category": "Software Architecture",
+  "aspect_ratio": "1:1",
+  "theme": "clean_minimal",
+  "language": "bn",
+  "voice": "bn-BD-PradeepNeural",
+  "created_at": "2026-10-28 02:06:18",
+  "branding": {
+    "author": "Rsm Monaem",
+    "brand_name": "FTLTD",
+    "brand_tagline": "Future TECH Limited",
+    "cta_text": "ফলো ও সাবস্ক্রাইব করুন"
+  },
+  "cron": {
+    "enabled": true,
+    "hour": 10,
+    "minute": 30
+  },
+  "llm": {
+    "provider": "template",
+    "api_key": "",
+    "model": "gemini-2.5-flash"
+  },
+  "audio": {
+    "provider": "edge_tts",
+    "edge_voice": "bn-BD-PradeepNeural",
+    "elevenlabs_api_key": "",
+    "elevenlabs_voice_id": "j5PhP1QJv2DvlhRv3mEv",
+    "openai_api_key": "",
+    "enable_sfx": true
+  }
+}

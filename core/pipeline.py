@@ -12,6 +12,7 @@ Coordinates:
 import os
 import sys
 import json
+import time
 import datetime
 import traceback
 
@@ -39,18 +40,19 @@ def format_social_copies(topic_data, branding):
             "tags": topic_data.get("core_tech", []) + ["System Design", "Bangla Tech", "Software Engineering"]
         },
         "facebook": {
-            "text": f"🔥 {hook}\n\n{summary}\n\nসফটওয়্যার আর্কিটেকচার ও প্রোডাকশন স্কেলিং সম্পর্কিত নিয়মিত ইনসাইট পেতে পেজটিতে লাইক ও ফলো দিয়ে রাখুন!\n\n{tags} #FTLTD #DevOps"
+            "text": f"🔥 {hook}\n\n{summary}\n\nসফটওয়্যার আর্কিটেকচার ও প্রোডাকশন স্কেলিং সম্পর্কিত নিয়মিত ইনসাইট পেতে পেজটিতে লাইক ও ফলো দিয়ে রাখুন!\n\n{tags} #{branding.get('brand_name', 'Tech')} #DevOps"
         },
         "linkedin": {
             "text": f"💡 Engineering Architecture Case Study: {topic}\n\n{hook}\n\n{summary}\n\nKey Takeaways:\n1. Zero single point of failure.\n2. Isolate concurrency bottlenecks before scaling.\n\nWhat is your preferred approach in production? Share in comments!\n\n{tags} #SystemDesign #SoftwareEngineering"
         },
         "instagram": {
-            "caption": f"⚡ {hook}\n\nSwipe to breakdown the architecture 👉\n\n{summary}\n\nFollow @{branding.get('brand_name').lower()} for daily developer insights!\n\n{tags} #programmer #devlife"
+            "caption": f"⚡ {hook}\n\nSwipe to breakdown the architecture 👉\n\n{summary}\n\nFollow {branding.get('handle', '@' + branding.get('brand_name', 'tech').lower())} for daily developer insights!\n\n{tags} #programmer #devlife"
         }
     }
 
-def run_pipeline(user_topic=None, user_hook=None, custom_scenes=None, aspect_ratio=None, theme=None, custom_dir=None, project_id=None):
+def run_pipeline(user_topic=None, user_hook=None, custom_scenes=None, aspect_ratio=None, theme=None, custom_dir=None, project_id=None, action="full"):
     cfg = load_config()
+    action = (action or "full").lower()
     
     # If project_id provided, merge project-specific config
     project_meta = None
@@ -78,12 +80,20 @@ def run_pipeline(user_topic=None, user_hook=None, custom_scenes=None, aspect_rat
     os.makedirs(job_dir, exist_ok=True)
 
     print(f"🚀 Initializing Video Pipeline in: {job_dir}")
+    print(f"🎯 Target Action Mode: {action.upper()}")
     print(f"📐 Target Aspect Ratio: {selected_aspect} ({ASPECT_RATIOS.get(selected_aspect, {}).get('name')})")
     print(f"🎨 Theme: {selected_theme}")
+    print(f"👤 Author/Channel: {branding.get('brand_name', 'Studio')} • {branding.get('author', 'Creator')}")
 
-    # 1. Step 1: Content Planning
+    # ==========================================
+    # Step 1: Content & Script Planning
+    # ==========================================
+    t0 = time.time()
+    print("STEP_START: 1 | Content & Script Planning")
     print("📝 [1/5] Planning Content & Scene Structuring...")
-    topic_data = plan_content(cfg, user_topic=user_topic, user_hook=user_hook)
+    topic_data = plan_content(cfg, user_topic=user_topic, user_hook=user_hook, custom_scenes=custom_scenes)
+    elapsed_1 = time.time() - t0
+    print(f"STEP_DONE: 1 | {elapsed_1:.1f}s")
 
     # If custom scenes are provided
     if custom_scenes and isinstance(custom_scenes, list) and len(custom_scenes) >= 2:
@@ -96,20 +106,93 @@ def run_pipeline(user_topic=None, user_hook=None, custom_scenes=None, aspect_rat
             {"id": "scene_4", "text": topic_data["scene_4_outro"]}
         ]
 
-    # 2. Step 2: Audio Synthesis & SFX Mixing
+    # ==========================================
+    # MODULAR BRANCH: THUMBNAILS ONLY
+    # ==========================================
+    if action == "thumbnail":
+        t0 = time.time()
+        print("STEP_START: 3 | Broadcast-Grade Thumbnails")
+        print("🎨 [3/5] Generating High-CTR Thumbnails (16:9 and 9:16)...")
+        thumb_16_9 = os.path.join(job_dir, "thumbnail_16_9.jpg")
+        thumb_9_16 = os.path.join(job_dir, "thumbnail_9_16.jpg")
+        generate_thumbnail(topic_data, thumb_16_9, aspect_ratio="16:9", theme_key=selected_theme, branding=branding)
+        generate_thumbnail(topic_data, thumb_9_16, aspect_ratio="9:16", theme_key=selected_theme, branding=branding)
+        elapsed_3 = time.time() - t0
+        print(f"STEP_DONE: 3 | {elapsed_3:.1f}s")
+
+        manifest = {
+            "created_at": now.strftime("%Y-%m-%d %H:%M:%S"),
+            "project_id": project_id,
+            "action": "thumbnail",
+            "aspect_ratio": selected_aspect,
+            "theme": selected_theme,
+            "topic": topic_data,
+            "thumbnails": {
+                "16_9": thumb_16_9,
+                "9_16": thumb_9_16
+            }
+        }
+        manifest_path = os.path.join(job_dir, "manifest.json")
+        with open(manifest_path, "w", encoding="utf-8") as f:
+            json.dump(manifest, f, indent=2, ensure_ascii=False)
+        print(f"PIPELINE_COMPLETE: {manifest_path}")
+        print(f"✨ Thumbnails Generation Complete in: {job_dir}")
+        return manifest
+
+    # ==========================================
+    # Step 2: Audio Synthesis & SFX Mixing
+    # ==========================================
+    t0 = time.time()
+    print("STEP_START: 2 | Studio Audio Synthesis & SFX Mixing")
     print("🎙️ [2/5] Synthesizing Studio Audio with Scene Cues & SFX...")
     audio_meta = build_scene_audio(scenes, job_dir, cfg)
+    elapsed_2 = time.time() - t0
     print(f"✅ Master audio ready ({audio_meta['duration']:.1f}s): {audio_meta['audio_path']}")
+    print(f"STEP_DONE: 2 | {elapsed_2:.1f}s")
 
-    # 3. Step 3: High-CTR Thumbnail Studio
+    # ==========================================
+    # MODULAR BRANCH: AUDIO ONLY
+    # ==========================================
+    if action == "audio":
+        manifest = {
+            "created_at": now.strftime("%Y-%m-%d %H:%M:%S"),
+            "project_id": project_id,
+            "action": "audio",
+            "aspect_ratio": selected_aspect,
+            "theme": selected_theme,
+            "topic": topic_data,
+            "audio": {
+                "duration": audio_meta["duration"],
+                "cues": audio_meta["cues"],
+                "path": audio_meta["audio_path"]
+            }
+        }
+        manifest_path = os.path.join(job_dir, "manifest.json")
+        with open(manifest_path, "w", encoding="utf-8") as f:
+            json.dump(manifest, f, indent=2, ensure_ascii=False)
+        print(f"PIPELINE_COMPLETE: {manifest_path}")
+        print(f"✨ Audio Synthesis Complete in: {job_dir}")
+        return manifest
+
+    # ==========================================
+    # Step 3: High-CTR Thumbnail Studio
+    # ==========================================
+    t0 = time.time()
+    print("STEP_START: 3 | Broadcast-Grade Thumbnails")
     print("🎨 [3/5] Generating Broadcast-Grade Thumbnails (16:9 and 9:16)...")
     thumb_16_9 = os.path.join(job_dir, "thumbnail_16_9.jpg")
     thumb_9_16 = os.path.join(job_dir, "thumbnail_9_16.jpg")
     
     generate_thumbnail(topic_data, thumb_16_9, aspect_ratio="16:9", theme_key=selected_theme, branding=branding)
     generate_thumbnail(topic_data, thumb_9_16, aspect_ratio="9:16", theme_key=selected_theme, branding=branding)
+    elapsed_3 = time.time() - t0
+    print(f"STEP_DONE: 3 | {elapsed_3:.1f}s")
 
-    # 4. Step 4: Motion Video Compilation
+    # ==========================================
+    # Step 4: Motion Video Compilation
+    # ==========================================
+    t0 = time.time()
+    print(f"STEP_START: 4 | Rendering Motion Graphics Video ({selected_aspect})")
     print(f"🎬 [4/5] Rendering Deterministic Motion Graphics Video ({selected_aspect})...")
     final_video_path = os.path.join(job_dir, f"video_{selected_aspect.replace(':', '_')}.mp4")
     render_motion_video(
@@ -121,8 +204,14 @@ def run_pipeline(user_topic=None, user_hook=None, custom_scenes=None, aspect_rat
         branding=branding,
         fps=cfg.get("video_engine", {}).get("fps", 24)
     )
+    elapsed_4 = time.time() - t0
+    print(f"STEP_DONE: 4 | {elapsed_4:.1f}s")
 
-    # 5. Step 5: Multi-Platform Post Formatting & Manifest
+    # ==========================================
+    # Step 5: Multi-Platform Post Formatting & Manifest
+    # ==========================================
+    t0 = time.time()
+    print("STEP_START: 5 | Platform Post Formatting & Manifest")
     print("📋 [5/5] Formatting High-Converting Platform Posts & Manifest...")
     copies = format_social_copies(topic_data, branding)
     copies_file = os.path.join(job_dir, "social_media_posts.json")
@@ -132,6 +221,7 @@ def run_pipeline(user_topic=None, user_hook=None, custom_scenes=None, aspect_rat
     manifest = {
         "created_at": now.strftime("%Y-%m-%d %H:%M:%S"),
         "project_id": project_id,
+        "action": action,
         "aspect_ratio": selected_aspect,
         "theme": selected_theme,
         "topic": topic_data,
@@ -151,7 +241,10 @@ def run_pipeline(user_topic=None, user_hook=None, custom_scenes=None, aspect_rat
     manifest_path = os.path.join(job_dir, "manifest.json")
     with open(manifest_path, "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)
+    elapsed_5 = time.time() - t0
+    print(f"STEP_DONE: 5 | {elapsed_5:.1f}s")
 
+    print(f"PIPELINE_COMPLETE: {manifest_path}")
     print(f"✨ Production Run Completed Successfully in: {job_dir}")
     return manifest
 

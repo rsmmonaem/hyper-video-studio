@@ -214,7 +214,7 @@ def get_project(project_id):
 
 def create_project(data):
     ensure_projects_dir()
-    name = data.get("name", "New Channel Project").strip()
+    name = (data.get("name") or "New Channel Project").strip()
     pid = data.get("id") or slugify(name)
     p_dir = get_project_dir(pid)
 
@@ -229,28 +229,44 @@ def create_project(data):
     os.makedirs(os.path.join(p_dir, "output"), exist_ok=True)
     os.makedirs(os.path.join(p_dir, "logs"), exist_ok=True)
 
+    author = data.get("author") or data.get("branding", {}).get("author") or "Host"
+    brand_name = data.get("brand_name") or data.get("branding", {}).get("brand_name") or name
+    handle = data.get("handle") or data.get("branding", {}).get("handle") or f"@{slugify(name)}"
+    category = data.get("category", "Software Architecture")
+
     project_data = {
         "id": pid,
         "name": name,
-        "description": data.get("description", "Autonomous developer video project"),
-        "category": data.get("category", "Software Architecture"),
+        "description": data.get("description", f"Autonomous video studio for {name}"),
+        "category": category,
         "aspect_ratio": data.get("aspect_ratio", "9:16"),
         "theme": data.get("theme", "cyber_cyan"),
         "language": data.get("language", "bn"),
         "voice": data.get("voice", "bn-IN-BashkarNeural"),
         "created_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "branding": data.get("branding", {
-            "author": "Rsm Monaem",
-            "brand_name": "FTLTD",
-            "brand_tagline": "Future TECH Limited",
-            "cta_text": "ফলো ও সাবস্ক্রাইব করুন"
+        "branding": {
+            "author": author,
+            "brand_name": brand_name,
+            "handle": handle,
+            "brand_tagline": data.get("branding", {}).get("brand_tagline", category),
+            "cta_text": data.get("branding", {}).get("cta_text", "ফলো ও সাবস্ক্রাইব করুন")
+        },
+        "draft": data.get("draft", {
+            "mode": "autonomous",
+            "topic": "",
+            "hook": "",
+            "scene_1": "",
+            "scene_2": "",
+            "scene_3": "",
+            "scene_4": ""
         }),
         "cron": data.get("cron", {
-            "enabled": True,
+            "enabled": False,
             "hour": 10,
             "minute": 30
         }),
         "llm": data.get("llm", {
+            "enabled": False,
             "provider": "template",
             "api_key": "",
             "model": "gemini-2.5-flash"
