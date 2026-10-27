@@ -1,0 +1,42 @@
+{
+  "version": "1.0.0",
+  "project_name": "Hyper Video Studio",
+  "language": "bn",
+  "default_aspect_ratio": "9:16",
+  "default_theme": "cyber_cyan",
+  "branding": {
+    "author": "Rsm Monaem",
+    "brand_name": "FTLTD",
+    "brand_tagline": "Future TECH Limited",
+    "cta_text": "ফলো ও সাবস্ক্রাইব করুন"
+  },
+  "llm": {
+    "provider": "template",
+    "api_key": "",
+    "base_url": "",
+    "model": "gemini-2.5-flash",
+    "temperature": 0.7
+  },
+  "audio": {
+    "provider": "edge_tts",
+    "edge_voice": "bn-IN-BashkarNeural",
+    "elevenlabs_api_key": "",
+    "elevenlabs_voice_id": "j5PhP1QJv2DvlhRv3mEv",
+    "openai_api_key": "",
+    "openai_voice": "onyx",
+    "custom_tts_url": "",
+    "ducking_volume": -22,
+    "enable_sfx": true
+  },
+  "cron": {
+    "enabled": true,
+    "hour": 10,
+    "minute": 30,
+    "type": "launchd_or_cron"
+  },
+  "video_engine": {
+    "fps": 24,
+    "chromium_path": "",
+    "ffmpeg_path": ""
+  }
+}

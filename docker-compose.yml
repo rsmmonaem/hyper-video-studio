@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  hyper-video-studio:
+    build: .
+    container_name: hyper-video-studio
+    restart: unless-stopped
+    ports:
+      - "8585:8585"
+    volumes:
+      - ./output:/app/output
+      - ./logs:/app/logs
+      - ./config.json:/app/config.json
+    environment:
+      - CHROME_BIN=/usr/bin/chromium
+      - PORT=8585

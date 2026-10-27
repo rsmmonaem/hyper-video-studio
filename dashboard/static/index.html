@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyper Video Studio - Autonomous Motion & Thumbnail Command Center</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@600;700;800&family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Modern Motion Library -->
+    <script src="https://cdn.jsdelivr.net/npm/motion@11.11.17/dist/motion.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- Top App Bar -->
+        <header class="glass-panel p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                    <i data-lucide="video" class="w-6 h-6 text-black"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-3">
+                        <h1 class="text-2xl font-extrabold tracking-tight">Hyper Video Studio</h1>
+                        <span class="status-pill pill-active text-xs">v1.0.0</span>
+                    </div>
+                    <p class="text-sm text-slate-400">Autonomous Developer Tech Reels, Thumbnails & Motion Engine</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+                <div id="statusBadge" class="status-pill pill-idle">
+                    <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                    <span id="statusText">IDLE</span>
+                </div>
+                <button id="btnRunNow" class="btn-primary" onclick="triggerRun()">
+                    <i data-lucide="play" class="w-4 h-4"></i>
+                    <span>Run Pipeline Now</span>
+                </button>
+                <button id="btnStop" class="btn-danger hidden" onclick="stopRun()">
+                    <i data-lucide="square" class="w-4 h-4"></i>
+                    <span>Stop</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="glass-panel p-2 flex flex-wrap gap-2">
+            <button class="tab-btn active" onclick="switchTab('studio')">
+                <i data-lucide="clapperboard" class="w-4 h-4"></i>
+                <span>Video Studio</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('cron')">
+                <i data-lucide="clock" class="w-4 h-4"></i>
+                <span>Cron & Automation</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('thumbnails')">
+                <i data-lucide="image" class="w-4 h-4"></i>
+                <span>Thumbnails</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('audio')">
+                <i data-lucide="mic" class="w-4 h-4"></i>
+                <span>Audio & TTS</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('llm')">
+                <i data-lucide="cpu" class="w-4 h-4"></i>
+                <span>AI & LLM Engine</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('library')">
+                <i data-lucide="folder" class="w-4 h-4"></i>
+                <span>Asset Library</span>
+            </button>
+        </div>
+
+        <!-- TAB CONTENT 1: VIDEO STUDIO -->
+        <div id="tab-studio" class="tab-content space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left: Topic & Script Configuration -->
+                <div class="lg:col-span-2 glass-panel p-6 space-y-5">
+                    <h2 class="text-lg font-bold flex items-center gap-2 text-cyan-400">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                        <span>Topic & Generation Directive</span>
+                    </h2>
+
+                    <!-- Mode Toggle -->
+                    <div class="flex gap-3 bg-slate-900/60 p-1.5 rounded-xl border border-white/5">
+                        <button id="modeAutonomous" class="flex-1 py-2 px-3 text-xs font-bold rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/30" onclick="setCreationMode('autonomous')">
+                            🤖 Autonomous AI Discovery
+                        </button>
+                        <button id="modeCustomTopic" class="flex-1 py-2 px-3 text-xs font-bold rounded-lg text-slate-400" onclick="setCreationMode('custom')">
+                            ✍️ Custom Topic & Hook
+                        </button>
+                        <button id="modeScript" class="flex-1 py-2 px-3 text-xs font-bold rounded-lg text-slate-400" onclick="setCreationMode('script')">
+                            📜 Multi-Scene Script
+                        </button>
+                    </div>
+
+                    <!-- Autonomous Info Box -->
+                    <div id="boxAutonomous" class="p-4 rounded-xl bg-cyan-950/20 border border-cyan-500/20 text-sm space-y-2">
+                        <p class="text-cyan-200 font-semibold flex items-center gap-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 text-cyan-400"></i>
+                            Zero-Effort Automated Trend Discovery
+                        </p>
+                        <p class="text-slate-400 text-xs">
+                            The studio selects from high-retention architectural blueprints (PostgreSQL indexing, Nginx load balancing, Redis caching, Docker zero-downtime, Kafka streaming) with tested psychological dilemma hooks.
+                        </p>
+                    </div>
+
+                    <!-- Custom Topic Inputs -->
+                    <div id="boxCustom" class="space-y-4 hidden">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Topic Title (Bengali/English)</label>
+                            <input type="text" id="customTopicInput" class="input-field" placeholder="e.g. Nginx Reverse Proxy & Load Balancing">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">Psychological Hook (Viral Dilemma)</label>
+                            <input type="text" id="customHookInput" class="input-field" placeholder="e.g. সার্ভারে হঠাৎ ১০ গুণ ট্রাফিক আসলে কীভাবে সামলাবেন?">
+                        </div>
+                    </div>
+
+                    <!-- Script Editor Inputs -->
+                    <div id="boxScript" class="space-y-3 hidden">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-1">Scene 1: High Stakes Hook (0-7s)</label>
+                            <input type="text" id="scene1Input" class="input-field text-sm" placeholder="Bengali spoken script for scene 1...">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-1">Scene 2: Problem Dilemma (7-15s)</label>
+                            <input type="text" id="scene2Input" class="input-field text-sm" placeholder="Bengali spoken script for scene 2...">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-1">Scene 3: Scalable Architecture (15-27s)</label>
+                            <input type="text" id="scene3Input" class="input-field text-sm" placeholder="Bengali spoken script for scene 3...">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-1">Scene 4: Production Rules & Outro (27-35s)</label>
+                            <input type="text" id="scene4Input" class="input-field text-sm" placeholder="Bengali spoken script for scene 4...">
+                        </div>
+                    </div>
+
+                    <!-- Aspect Ratio Matrix -->
+                    <div class="space-y-3 pt-3 border-t border-white/5">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400">Video Aspect Ratio</label>
+                        <div class="grid grid-cols-3 sm:grid-cols-6 gap-2.5">
+                            <div class="aspect-card selected" onclick="selectAspect('9:16')">
+                                <div class="text-xs font-bold text-cyan-300">9:16</div>
+                                <div class="text-[10px] text-slate-400 mt-0.5">Shorts/Reel</div>
+                            </div>
+                            <div class="aspect-card" onclick="selectAspect('16:9')">
+                                <div class="text-xs font-bold text-slate-200">16:9</div>
+                                <div class="text-[10px] text-slate-400 mt-0.5">YouTube/TV</div>
+                            </div>
+                            <div class="aspect-card" onclick="selectAspect('1:1')">
+                                <div class="text-xs font-bold text-slate-200">1:1</div>
+                                <div class="text-[10px] text-slate-400 mt-0.5">Square</div>
+                            </div>
+                            <div class="aspect-card" onclick="selectAspect('4:5')">
+                                <div class="text-xs font-bold text-slate-200">4:5</div>
+                                <div class="text-[10px] text-slate-400 mt-0.5">IG Feed</div>
+                            </div>
+                            <div class="aspect-card" onclick="selectAspect('4:3')">
+                                <div class="text-xs font-bold text-slate-200">4:3</div>
+                                <div class="text-[10px] text-slate-400 mt-0.5">Classic</div>
+                            </div>
+                            <div class="aspect-card" onclick="selectAspect('3:4')">
+                                <div class="text-xs font-bold text-slate-200">3:4</div>
+                                <div class="text-[10px] text-slate-400 mt-0.5">Tall</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Themes -->
+                    <div class="space-y-3 pt-3 border-t border-white/5">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400">Aesthetic Visual Theme</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            <div class="p-3 rounded-xl border border-cyan-500/40 bg-cyan-950/20 cursor-pointer theme-card selected" onclick="selectTheme('cyber_cyan')">
+                                <div class="w-full h-3 rounded bg-gradient-to-r from-cyan-400 to-blue-500 mb-2"></div>
+                                <div class="text-xs font-bold text-cyan-300">Cyber Cyan</div>
+                                <div class="text-[10px] text-slate-400">Obsidian & Neon Blue</div>
+                            </div>
+                            <div class="p-3 rounded-xl border border-white/5 bg-slate-900/40 cursor-pointer theme-card" onclick="selectTheme('fire_ember')">
+                                <div class="w-full h-3 rounded bg-gradient-to-r from-orange-500 to-amber-500 mb-2"></div>
+                                <div class="text-xs font-bold text-slate-200">Fire Ember</div>
+                                <div class="text-[10px] text-slate-400">Charcoal & Orange</div>
+                            </div>
+                            <div class="p-3 rounded-xl border border-white/5 bg-slate-900/40 cursor-pointer theme-card" onclick="selectTheme('matrix_terminal')">
+                                <div class="w-full h-3 rounded bg-gradient-to-r from-emerald-500 to-green-500 mb-2"></div>
+                                <div class="text-xs font-bold text-slate-200">Matrix Terminal</div>
+                                <div class="text-[10px] text-slate-400">Hacker Green</div>
+                            </div>
+                            <div class="p-3 rounded-xl border border-white/5 bg-slate-900/40 cursor-pointer theme-card" onclick="selectTheme('tokyo_neon')">
+                                <div class="w-full h-3 rounded bg-gradient-to-r from-purple-500 to-pink-500 mb-2"></div>
+                                <div class="text-xs font-bold text-slate-200">Tokyo Midnight</div>
+                                <div class="text-[10px] text-slate-400">Royal Violet</div>
+                            </div>
+                            <div class="p-3 rounded-xl border border-white/5 bg-slate-900/40 cursor-pointer theme-card" onclick="selectTheme('clean_minimal')">
+                                <div class="w-full h-3 rounded bg-gradient-to-r from-slate-200 to-slate-400 mb-2"></div>
+                                <div class="text-xs font-bold text-slate-200">Studio Obsidian</div>
+                                <div class="text-[10px] text-slate-400">Monochrome Titanium</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Live Execution Preview & Batch Queue -->
+                <div class="glass-panel p-6 space-y-5">
+                    <h2 class="text-lg font-bold flex items-center gap-2 text-slate-200">
+                        <i data-lucide="layers" class="w-5 h-5 text-cyan-400"></i>
+                        <span>Production Status</span>
+                    </h2>
+
+                    <div class="p-4 rounded-xl bg-slate-950/60 border border-white/5 space-y-3">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-400">Active Engine:</span>
+                            <span class="font-mono text-cyan-400">HyperMotion 60fps</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-400">Audio Synth:</span>
+                            <span id="labelAudioProvider" class="font-mono text-slate-200">Native Edge-TTS (Free)</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-400">Target Ratio:</span>
+                            <span id="labelActiveAspect" class="font-mono text-cyan-300">9:16 (Vertical)</span>
+                        </div>
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-400">SFX Layers:</span>
+                            <span class="font-mono text-emerald-400">Whoosh + Riser + Pop</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Quick Actions</h3>
+                        <button class="w-full btn-primary justify-center text-sm" onclick="triggerRun()">
+                            <i data-lucide="zap" class="w-4 h-4"></i>
+                            <span>Generate Video & Thumbnails</span>
+                        </button>
+                    </div>
+
+                    <!-- Batch Trigger Accordion -->
+                    <div class="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                            <i data-lucide="boxes" class="w-4 h-4 text-cyan-400"></i>
+                            <span>Batch Multi-Video Generation</span>
+                        </h3>
+                        <p class="text-xs text-slate-400">Generate a series of multiple videos consecutively in one click.</p>
+                        <textarea id="batchInput" class="input-field text-xs font-mono h-24" placeholder="Enter one topic per line..."></textarea>
+                        <button class="w-full btn-secondary justify-center text-xs" onclick="startBatchRun()">
+                            <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                            <span>Run Batch Queue</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT 2: CRON & AUTOMATION (ZERO TERMINAL) -->
+        <div id="tab-cron" class="tab-content hidden space-y-6">
+            <div class="glass-panel p-6 space-y-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/5 pb-6">
+                    <div>
+                        <h2 class="text-xl font-extrabold flex items-center gap-3 text-cyan-400">
+                            <i data-lucide="clock" class="w-6 h-6"></i>
+                            <span>Automated Cron & Background Scheduler</span>
+                        </h2>
+                        <p class="text-sm text-slate-400 mt-1">
+                            Set up zero-terminal daily autonomous runs. Works across macOS LaunchAgents and Linux/VPS Crontab.
+                        </p>
+                    </div>
+                    <div id="cronStatusPill" class="status-pill pill-active">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-active"></span>
+                        <span id="cronStatusLabel">SCHEDULE ACTIVE</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Schedule Form -->
+                    <div class="p-5 rounded-2xl bg-slate-900/50 border border-white/5 space-y-4">
+                        <h3 class="text-sm font-bold text-slate-200">Daily Trigger Time (Zero Terminal Setup)</h3>
+                        <div class="flex items-center gap-4">
+                            <div class="flex-1">
+                                <label class="block text-xs font-bold text-slate-400 mb-1">Hour (0-23)</label>
+                                <input type="number" id="cronHour" class="input-field text-center font-mono text-lg font-bold" min="0" max="23" value="10">
+                            </div>
+                            <div class="text-2xl font-bold text-slate-500 mt-4">:</div>
+                            <div class="flex-1">
+                                <label class="block text-xs font-bold text-slate-400 mb-1">Minute (0-59)</label>
+                                <input type="number" id="cronMinute" class="input-field text-center font-mono text-lg font-bold" min="0" max="59" value="30">
+                            </div>
+                        </div>
+
+                        <div class="pt-2 flex gap-3">
+                            <button class="btn-primary flex-1 justify-center text-sm" onclick="saveScheduler()">
+                                <i data-lucide="check" class="w-4 h-4"></i>
+                                <span>Save & Activate Schedule</span>
+                            </button>
+                            <button class="btn-danger flex-1 justify-center text-sm" onclick="disableScheduler()">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                <span>Disable Schedule</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Platform Info & Next Run -->
+                    <div class="p-5 rounded-2xl bg-slate-900/50 border border-white/5 space-y-4">
+                        <h3 class="text-sm font-bold text-slate-200">System Integration Status</h3>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between py-1 border-b border-white/5">
+                                <span class="text-slate-400">Target Operating System:</span>
+                                <span id="cronPlatform" class="font-mono text-slate-200">macOS (LaunchAgent)</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-white/5">
+                                <span class="text-slate-400">Service Label:</span>
+                                <span class="font-mono text-cyan-400">com.hypervideostudio.daily</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-white/5">
+                                <span class="text-slate-400">Scheduled Trigger:</span>
+                                <span id="cronScheduledTime" class="font-mono text-emerald-400 font-bold">10:30 AM Daily</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Scheduler Log -->
+                <div class="space-y-2">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Scheduler Log Output</h3>
+                    <div id="schedulerLogBox" class="terminal-window h-48">
+                        [Scheduler log will load here...]
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT 3: THUMBNAILS -->
+        <div id="tab-thumbnails" class="tab-content hidden space-y-6">
+            <div class="glass-panel p-6 space-y-6">
+                <div>
+                    <h2 class="text-xl font-extrabold text-cyan-400 flex items-center gap-2">
+                        <i data-lucide="image" class="w-6 h-6"></i>
+                        <span>High-CTR Broadcast Thumbnail Studio</span>
+                    </h2>
+                    <p class="text-sm text-slate-400">Rendered with Chromium Headless, Google Fonts Hind Siliguri, neon glows, and 3D glass cards.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- 16:9 Landscape YouTube Thumbnail -->
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-bold text-slate-200">16:9 YouTube Thumbnail (1920x1080)</span>
+                            <a id="downloadThumb16" href="#" download="thumbnail_16_9.jpg" class="btn-secondary text-xs">
+                                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                <span>Download</span>
+                            </a>
+                        </div>
+                        <div class="aspect-video rounded-xl overflow-hidden border border-white/10 bg-black/40 flex items-center justify-center">
+                            <img id="imgThumb16" src="/output/test_thumb_16_9.jpg" alt="16:9 Thumbnail" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+
+                    <!-- 9:16 Portrait Reels Cover Thumbnail -->
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-bold text-slate-200">9:16 Reels/Shorts Cover (1080x1920)</span>
+                            <a id="downloadThumb9" href="#" download="thumbnail_9_16.jpg" class="btn-secondary text-xs">
+                                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                <span>Download</span>
+                            </a>
+                        </div>
+                        <div class="h-80 w-48 mx-auto rounded-xl overflow-hidden border border-white/10 bg-black/40 flex items-center justify-center">
+                            <img id="imgThumb9" src="/static/placeholder.jpg" alt="9:16 Thumbnail" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT 4: AUDIO & TTS -->
+        <div id="tab-audio" class="tab-content hidden space-y-6">
+            <div class="glass-panel p-6 space-y-6 max-w-3xl">
+                <div>
+                    <h2 class="text-xl font-extrabold text-cyan-400 flex items-center gap-2">
+                        <i data-lucide="mic" class="w-6 h-6"></i>
+                        <span>Audio Synthesis & Neural Voice Engine</span>
+                    </h2>
+                    <p class="text-sm text-slate-400">Choose between 100% Free Edge-TTS, ElevenLabs Studio, or OpenAI TTS.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-2">TTS Provider</label>
+                        <select id="ttsProviderSelect" class="input-field" onchange="updateTTSForm()">
+                            <option value="edge_tts">Native Edge-TTS (100% Free / Zero API Key / Studio Bengali)</option>
+                            <option value="elevenlabs">ElevenLabs Multilingual v2 (Premium Voice ID)</option>
+                            <option value="openai">OpenAI TTS (Onyx, Alloy, Nova)</option>
+                        </select>
+                    </div>
+
+                    <!-- Edge-TTS Voices -->
+                    <div id="edgeVoiceBox">
+                        <label class="block text-xs font-bold text-slate-400 mb-1">Native Neural Voice</label>
+                        <select id="edgeVoiceSelect" class="input-field">
+                            <option value="bn-IN-BashkarNeural">bn-IN-BashkarNeural (Studio Bengali Male - Energetic)</option>
+                            <option value="bn-BD-PradeepNeural">bn-BD-PradeepNeural (Native Bangladesh Male)</option>
+                            <option value="bn-BD-NabanitaNeural">bn-BD-NabanitaNeural (Native Bangladesh Female)</option>
+                            <option value="en-US-AndrewMultilingualNeural">en-US-AndrewMultilingualNeural (Global English)</option>
+                        </select>
+                    </div>
+
+                    <!-- ElevenLabs Box -->
+                    <div id="elevenVoiceBox" class="space-y-3 hidden">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-1">ElevenLabs API Key</label>
+                            <input type="password" id="elevenApiKey" class="input-field" placeholder="xi-api-key...">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 mb-1">ElevenLabs Voice ID</label>
+                            <input type="text" id="elevenVoiceId" class="input-field" placeholder="e.g. j5PhP1QJv2DvlhRv3mEv (Subhajit)">
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <button class="btn-primary" onclick="saveAudioSettings()">
+                            <i data-lucide="save" class="w-4 h-4"></i>
+                            <span>Save Audio Settings</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT 5: AI & LLM -->
+        <div id="tab-llm" class="tab-content hidden space-y-6">
+            <div class="glass-panel p-6 space-y-6 max-w-3xl">
+                <div>
+                    <h2 class="text-xl font-extrabold text-cyan-400 flex items-center gap-2">
+                        <i data-lucide="cpu" class="w-6 h-6"></i>
+                        <span>AI Script Director & Model Configuration</span>
+                    </h2>
+                    <p class="text-sm text-slate-400">Supports Free Blueprints, Google Gemini, OpenAI, and OpenRouter.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-1">LLM Provider</label>
+                        <select id="llmProviderSelect" class="input-field">
+                            <option value="template">Curated Blueprints (100% Free / Zero API Key)</option>
+                            <option value="gemini">Google Gemini (Gemini 2.5/3.0)</option>
+                            <option value="openai">OpenAI (GPT-4o, GPT-4o-mini)</option>
+                            <option value="openrouter">OpenRouter / OmniRouter (Claude, Llama, DeepSeek)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-1">API Key</label>
+                        <input type="password" id="llmApiKey" class="input-field" placeholder="Enter API Key if using external LLM...">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-1">Model Name</label>
+                        <input type="text" id="llmModel" class="input-field" value="gemini-2.5-flash">
+                    </div>
+
+                    <div class="pt-4">
+                        <button class="btn-primary" onclick="saveLLMSettings()">
+                            <i data-lucide="save" class="w-4 h-4"></i>
+                            <span>Save LLM Settings</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT 6: ASSET LIBRARY -->
+        <div id="tab-library" class="tab-content hidden space-y-6">
+            <div class="glass-panel p-6 space-y-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-cyan-400 flex items-center gap-2">
+                            <i data-lucide="folder" class="w-6 h-6"></i>
+                            <span>Generated Media & Outputs</span>
+                        </h2>
+                        <p class="text-sm text-slate-400">All rendered videos, neural audios, and social media posts.</p>
+                    </div>
+                    <button class="btn-secondary text-xs" onclick="loadStatus()">
+                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+
+                <div id="jobsList" class="space-y-4">
+                    <!-- Injected by JavaScript -->
+                    <div class="text-slate-400 text-sm">Scanning output directory...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live WebSocket Terminal Console -->
+        <div class="glass-panel p-5 space-y-3">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                    <i data-lucide="terminal" class="w-4 h-4 text-cyan-400"></i>
+                    <span>Live Pipeline Stream</span>
+                </h3>
+                <span class="text-[11px] font-mono text-slate-400">WebSocket: ws://localhost:8585/api/ws/logs</span>
+            </div>
+            <div id="terminalLogs" class="terminal-window">
+                Ready for autonomous execution.
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/app.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width={{ width }}, height={{ height }}">
+    <title>High CTR Thumbnail - {{ topic.topic }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@700;800;900&family=JetBrains+Mono:wght@700;800&family=Plus+Jakarta+Sans:wght@800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: {{ theme.primary }};
+            --secondary: {{ theme.secondary }};
+            --accent: {{ theme.accent }};
+            --glow: {{ theme.glow }};
+            --border: {{ theme.border }};
+            --canvas-w: {{ width }}px;
+            --canvas-h: {{ height }}px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            width: var(--canvas-w);
+            height: var(--canvas-h);
+            overflow: hidden;
+            background: {{ theme.bg_gradient }};
+            font-family: 'Hind Siliguri', -apple-system, sans-serif;
+            color: #ffffff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 80px;
+        }
+
+        /* Ambient Lighting FX */
+        .glow-orb-1 {
+            position: absolute;
+            top: -150px;
+            left: -150px;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: var(--primary);
+            filter: blur(180px);
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .glow-orb-2 {
+            position: absolute;
+            bottom: -150px;
+            right: -150px;
+            width: 650px;
+            height: 650px;
+            border-radius: 50%;
+            background: var(--accent);
+            filter: blur(180px);
+            opacity: 0.55;
+            pointer-events: none;
+        }
+        .vignette {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.75) 100%);
+            pointer-events: none;
+        }
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(var(--border) 1.5px, transparent 1.5px),
+                linear-gradient(90deg, var(--border) 1.5px, transparent 1.5px);
+            background-size: 80px 80px;
+            opacity: 0.25;
+            pointer-events: none;
+        }
+
+        /* Neon Border Frame */
+        .frame-border {
+            position: absolute;
+            inset: 24px;
+            border: 2px solid var(--border);
+            border-radius: 28px;
+            pointer-events: none;
+            box-shadow: inset 0 0 35px var(--glow), 0 0 40px var(--glow);
+        }
+
+        /* Top Bar */
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+        .badge-pill {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 32px;
+            border-radius: 9999px;
+            background: rgba(0, 0, 0, 0.65);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 26px;
+            font-weight: 800;
+            box-shadow: 0 0 25px var(--glow);
+            backdrop-filter: blur(12px);
+        }
+        .pulse-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 0 14px var(--primary);
+        }
+        .author-tag {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 2px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px 28px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Main Content Container */
+        .content-body {
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* High Retention Typography */
+        .kicker-tag {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 30px;
+            font-weight: 800;
+            color: #ff5f56;
+            background: rgba(255, 95, 86, 0.15);
+            border: 1px solid #ff5f56;
+            padding: 8px 24px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            width: fit-content;
+        }
+
+        .main-headline {
+            font-size: 78px;
+            font-weight: 900;
+            line-height: 1.15;
+            text-shadow: 0 8px 30px rgba(0, 0, 0, 0.9);
+            max-width: 1500px;
+        }
+        .main-headline .highlight {
+            color: var(--primary);
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 25px var(--glow));
+        }
+
+        .topic-subheading {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 40px;
+            font-weight: 800;
+            color: #cbd5e1;
+            letter-spacing: -0.5px;
+        }
+
+        /* Bottom Feature Grid / Mockup */
+        .bottom-row {
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+        }
+        .tech-tags {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .tech-pill {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            padding: 10px 24px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+        .cta-box {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            padding: 18px 45px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #000000;
+            box-shadow: 0 0 35px var(--glow);
+            text-transform: uppercase;
+        }
+
+        /* Aspect ratio 9:16 specific */
+        @media (max-aspect-ratio: 1/1) {
+            body { padding: 90px 60px; }
+            .main-headline { font-size: 64px; }
+            .topic-subheading { font-size: 32px; }
+            .bottom-row { flex-direction: column; align-items: flex-start; }
+            .cta-box { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="glow-orb-1"></div>
+    <div class="glow-orb-2"></div>
+    <div class="grid-overlay"></div>
+    <div class="vignette"></div>
+    <div class="frame-border"></div>
+
+    <!-- Top Row -->
+    <div class="top-row">
+        <div class="badge-pill">
+            <span class="pulse-dot"></span>
+            <span>// {{ topic.category|upper }} //</span>
+        </div>
+        <div class="author-tag">{{ branding.brand_name }} • {{ branding.author }}</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-body">
+        <div class="kicker-tag">🔥 10X PRODUCTION SCALE</div>
+        <h1 class="main-headline">
+            {{ topic.hook }}
+        </h1>
+        <div class="topic-subheading">
+            <span class="highlight">ARCH:</span> {{ topic.topic }}
+        </div>
+    </div>
+
+    <!-- Bottom Row -->
+    <div class="bottom-row">
+        <div class="tech-tags">
+            {% for tech in topic.core_tech %}
+            <div class="tech-pill">#{{ tech }}</div>
+            {% endfor %}
+        </div>
+        <div class="cta-box">WATCH NOW ⚡</div>
+    </div>
+</body>
+</html>
